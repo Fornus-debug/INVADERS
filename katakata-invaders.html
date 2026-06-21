@@ -1,0 +1,3731 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="description" content="Fornus Portfolio。AI・GAS・Webアプリで転記・集計・予約管理など現場の手作業を減らす制作実績と簡易見積もり。">
+<meta name="keywords" content="GAS自動化,スプレッドシート,Webアプリ,AI活用,LINE連携,業務効率化,個人事業主,小規模事業者">
+<meta property="og:title" content="Fornus Portfolio | AI・GAS・Web自動化">
+<meta property="og:description" content="ゲームを始めるように、AI・GAS・Webアプリの制作実績と対応メニューを選べるポートフォリオ。">
+<meta property="og:type" content="website">
+<title>Fornus Portfolio | AI・GAS・Web自動化</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a0a0a'/%3E%3Ctext y='24' font-size='24' fill='%2300FF41'%3E🎮%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=DotGothic16&display=swap" rel="stylesheet">
+<style>
+/* ================================================
+   CSS VARIABLES & RESET
+   ================================================ */
+:root {
+  --bg: #0a0a0a;
+  --bg2: #0d0d0d;
+  --green: #00FF41;
+  --cyan: #00D4FF;
+  --yellow: #FFE600;
+  --red: #FF3355;
+  --orange: #FF9900;
+  --purple: #863BFF;
+  --gray: #AAAAAA;
+  --border: #2a2a2a;
+  --card-bg: #111111;
+  --text: #e8e8e8;
+  --fs-micro: 10px;
+  --fs-label: 11px;
+  --fs-small: 13px;
+  --fs-body: 15px;
+  --fs-body-lg: 16px;
+  --fs-title: clamp(18px, 4vw, 28px);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DotGothic16', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Press Start 2P', monospace;
+}
+
+img {
+  image-rendering: pixelated;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* ================================================
+   CRT EFFECT
+   ================================================ */
+.crt-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.crt-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.12) 2px,
+    rgba(0, 0, 0, 0.12) 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+.crt-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+  pointer-events: none;
+  z-index: 11;
+}
+
+/* ================================================
+   TYPOGRAPHY UTILITIES
+   ================================================ */
+.font-pixel   { font-family: 'Press Start 2P', monospace; }
+.font-dot     { font-family: 'DotGothic16', sans-serif; }
+
+.text-green   { color: var(--green); }
+.text-cyan    { color: var(--cyan); }
+.text-yellow  { color: var(--yellow); }
+.text-red     { color: var(--red); }
+.text-orange  { color: var(--orange); }
+.text-gray    { color: var(--gray); }
+.text-white   { color: #fff; }
+.text-dim     { color: #555; }
+
+.glow-green  { text-shadow: 0 0 8px var(--green), 0 0 24px rgba(0,255,65,0.4); }
+.glow-cyan   { text-shadow: 0 0 8px var(--cyan),  0 0 24px rgba(0,212,255,0.4); }
+.glow-yellow { text-shadow: 0 0 8px var(--yellow), 0 0 24px rgba(255,230,0,0.4); }
+.glow-red    { text-shadow: 0 0 8px var(--red),   0 0 24px rgba(255,51,85,0.4); }
+
+/* ================================================
+   ANIMATIONS
+   ================================================ */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-5px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 6px rgba(255,230,0,0.4), 0 0 0 2px rgba(255,230,0,0.3); }
+  50%       { box-shadow: 0 0 20px rgba(255,230,0,0.8), 0 0 0 2px rgba(255,230,0,0.8); }
+}
+
+@keyframes glow-pulse-green {
+  0%, 100% { box-shadow: 0 0 8px rgba(0,255,65,0.4), 0 0 0 2px rgba(0,255,65,0.3); }
+  50%       { box-shadow: 0 0 24px rgba(0,255,65,0.8), 0 0 0 2px rgba(0,255,65,0.8); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes card-reveal {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes scanline-pass {
+  from { top: -5%; }
+  to   { top: 105%; }
+}
+
+@keyframes pixel-pop {
+  0%   { opacity: 1; transform: scale(1); }
+  50%  { opacity: 1; transform: scale(1.3); }
+  100% { opacity: 0; transform: scale(0.5); }
+}
+
+.anim-blink     { animation: blink 1s step-end infinite; }
+.anim-float     { animation: float 2.5s ease-in-out infinite; }
+.anim-float-slow { animation: float-slow 4s ease-in-out infinite; }
+.anim-glow      { animation: glow-pulse 2s ease-in-out infinite; }
+
+/* ================================================
+   SECTION DIVIDER
+   ================================================ */
+.pixel-hr {
+  height: 2px;
+  border: none;
+  background: repeating-linear-gradient(90deg, var(--border) 0 8px, transparent 8px 16px);
+}
+
+/* ================================================
+   STARS BACKGROUND
+   ================================================ */
+#stars-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* ================================================
+   HERO SECTION
+   ================================================ */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 90px 20px 60px;
+  background: radial-gradient(
+    ellipse at 50% 20%,
+    rgba(0, 255, 65, 0.06) 0%,
+    transparent 55%
+  ), var(--bg);
+  z-index: 1;
+}
+
+/* HUD bar */
+.hero-hud {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  background: rgba(0, 0, 0, 0.6);
+  border-bottom: 1px solid var(--border);
+  gap: 8px;
+  flex-wrap: wrap;
+  z-index: 20;
+}
+
+.hud-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.hud-label { color: var(--gray); font-size: 6px; letter-spacing: 0.1em; }
+.hud-value { color: var(--yellow); letter-spacing: 0.05em; }
+.hud-brand { color: var(--cyan); font-size: 7px; letter-spacing: 0.1em; }
+
+/* Main content */
+.hero-content {
+  text-align: center;
+  z-index: 2;
+  max-width: 640px;
+  width: 100%;
+}
+
+.game-logo-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(11px, 3.5vw, 22px);
+  color: var(--green);
+  text-shadow: 0 0 10px var(--green), 0 0 30px rgba(0,255,65,0.4);
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  margin-bottom: 28px;
+  display: block;
+}
+
+.hero-tagline {
+  font-family: 'DotGothic16', sans-serif;
+  font-size: clamp(24px, 6vw, 40px);
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 20px rgba(255,255,255,0.15);
+  margin-bottom: 16px;
+  line-height: 1.35;
+}
+
+.hero-sub {
+  font-family: 'DotGothic16', sans-serif;
+  font-size: clamp(14px, 3.5vw, 18px);
+  color: var(--gray);
+  margin-bottom: 40px;
+  line-height: 1.75;
+}
+
+/* Player area */
+.hero-player-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+#hero-sprite {
+  width: 72px;
+  height: 72px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 10px var(--yellow)) drop-shadow(0 0 20px rgba(255,230,0,0.4));
+  animation: float 2.5s ease-in-out infinite;
+}
+
+#portfolio-hero-sprite {
+  width: 86px;
+  height: 86px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 10px var(--yellow)) drop-shadow(0 0 20px rgba(255,230,0,0.4));
+  animation: float 2.5s steps(3, end) infinite;
+}
+
+.hero-sprite-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--yellow);
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 6px var(--yellow);
+}
+
+/* PRESS START button */
+.press-start-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(10px, 2.5vw, 14px);
+  color: var(--yellow);
+  background: transparent;
+  border: 2px solid var(--yellow);
+  padding: 16px 32px;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+  transition: background 0.1s, color 0.1s, box-shadow 0.2s;
+  animation: glow-pulse 2s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.press-start-btn:hover,
+.press-start-btn:focus {
+  background: var(--yellow);
+  color: var(--bg);
+  box-shadow: 0 0 32px var(--yellow);
+}
+
+.press-start-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+  animation: none;
+}
+
+.press-start-hint {
+  font-size: 11px;
+  color: var(--gray);
+  font-family: 'DotGothic16', sans-serif;
+  margin-top: 10px;
+}
+
+/* Tags */
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+.hero-tag {
+  font-size: 10px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  color: var(--gray);
+  font-family: 'DotGothic16', sans-serif;
+  background: rgba(255,255,255,0.02);
+  border-radius: 1px;
+}
+
+/* Scroll arrow */
+.scroll-arrow {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: var(--border);
+  font-size: 11px;
+  font-family: 'DotGothic16', sans-serif;
+  animation: float 2s ease-in-out infinite;
+  z-index: 2;
+}
+
+/* ================================================
+   GAME STAGE SECTION
+   ================================================ */
+#game-stage {
+  position: relative;
+  background: var(--bg);
+  padding: 0 0 24px;
+  z-index: 1;
+}
+
+.game-hud-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background: rgba(0,0,0,0.8);
+  border-bottom: 1px solid var(--border);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.game-stat-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.game-stat-label { color: var(--gray); font-size: 6px; }
+.game-stat-value { color: var(--yellow); }
+.game-cleared-val { color: var(--green); }
+
+/* Canvas */
+.canvas-wrap {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  background: #000;
+  position: relative;
+  border-left: 2px solid var(--border);
+  border-right: 2px solid var(--border);
+}
+
+#gameCanvas,
+#menuCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+
+/* CRT scanline on canvas */
+.canvas-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.08) 2px,
+    rgba(0,0,0,0.08) 4px
+  );
+  z-index: 5;
+}
+
+/* Mobile controls */
+.mobile-controls {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  max-width: 640px;
+  margin: 0 auto;
+  background: rgba(0,0,0,0.3);
+}
+
+.mob-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  padding: 15px 18px;
+  border: 2px solid;
+  background: transparent;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  min-width: 68px;
+  letter-spacing: 0.05em;
+  transition: background 0.08s, color 0.08s;
+  line-height: 1;
+}
+
+.mob-btn-lr {
+  color: var(--cyan);
+  border-color: var(--cyan);
+}
+
+.mob-btn-fire {
+  color: var(--yellow);
+  border-color: var(--yellow);
+  min-width: 96px;
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.mob-btn:active,
+.mob-btn.pressed {
+  background: currentColor;
+  color: var(--bg);
+}
+
+.game-pc-hint {
+  text-align: center;
+  font-size: 11px;
+  color: var(--gray);
+  font-family: 'DotGothic16', sans-serif;
+  padding: 8px 16px 0;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.game-skip-hint {
+  text-align: center;
+  padding: 14px 16px;
+  font-size: 12px;
+  color: var(--border);
+  font-family: 'DotGothic16', sans-serif;
+  border-top: 1px dashed var(--border);
+  margin-top: 12px;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 767px) {
+  .mobile-controls { display: flex; }
+  .game-pc-hint    { display: none; }
+}
+
+/* ================================================
+   SERVICES SECTION
+   ================================================ */
+#services {
+  padding: 64px 16px 48px;
+  max-width: 900px;
+  margin: 0 auto;
+  z-index: 1;
+  position: relative;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(11px, 2.5vw, 16px);
+  margin-bottom: 12px;
+  letter-spacing: 0.05em;
+}
+
+.section-sub {
+  font-size: 14px;
+  color: var(--gray);
+  font-family: 'DotGothic16', sans-serif;
+  line-height: 1.75;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Service Card */
+.service-card {
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  padding: 20px;
+  position: relative;
+  transition: border-color 0.3s, box-shadow 0.3s, opacity 0.3s;
+  opacity: 0.28;
+  pointer-events: none;
+}
+
+.service-card.cleared {
+  opacity: 1;
+  pointer-events: auto;
+  border-color: var(--green);
+  box-shadow: 0 0 14px rgba(0,255,65,0.18);
+  animation: card-reveal 0.5s ease-out;
+}
+
+.service-card.cleared::before {
+  content: '✓ CLEARED';
+  position: absolute;
+  top: -11px; right: 14px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: var(--green);
+  background: var(--bg);
+  padding: 2px 8px;
+  border: 1px solid var(--green);
+  white-space: nowrap;
+}
+
+.sc-task {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--red);
+  margin-bottom: 10px;
+  text-shadow: 0 0 4px rgba(255,51,85,0.5);
+}
+
+.sc-title {
+  font-size: 15px;
+  color: var(--cyan);
+  font-family: 'DotGothic16', sans-serif;
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.4;
+  text-shadow: 0 0 6px rgba(0,212,255,0.3);
+}
+
+.sc-effect {
+  font-size: 13px;
+  color: var(--text);
+  font-family: 'DotGothic16', sans-serif;
+  margin-bottom: 12px;
+  line-height: 1.65;
+}
+
+.sc-effect strong { color: var(--green); }
+
+.sc-target {
+  font-size: 12px;
+  color: var(--gray);
+  font-family: 'DotGothic16', sans-serif;
+  margin-bottom: 14px;
+  line-height: 1.55;
+  padding: 8px;
+  background: rgba(255,255,255,0.02);
+  border-left: 2px solid var(--border);
+}
+
+.sc-cta {
+  font-size: 12px;
+  color: var(--yellow);
+  font-family: 'DotGothic16', sans-serif;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  line-height: 1.55;
+}
+
+/* Show all button */
+.show-all-btn {
+  display: block;
+  margin: 28px auto 0;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--gray);
+  border: 1px solid var(--border);
+  background: transparent;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  letter-spacing: 0.05em;
+}
+
+.show-all-btn:hover,
+.show-all-btn:focus {
+  color: var(--cyan);
+  border-color: var(--cyan);
+}
+
+/* ================================================
+   SCOREBOARD SECTION
+   ================================================ */
+#scoreboard {
+  padding: 64px 16px 48px;
+  background: var(--bg2);
+  position: relative;
+  z-index: 1;
+}
+
+.scoreboard-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border-left: 4px solid var(--green);
+  padding: 16px 18px;
+}
+
+.stat-card.hl-yellow { border-left-color: var(--yellow); }
+.stat-card.hl-cyan   { border-left-color: var(--cyan); }
+
+.stat-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 6px;
+  color: var(--gray);
+  margin-bottom: 10px;
+  letter-spacing: 0.15em;
+}
+
+.stat-number {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(18px, 4vw, 26px);
+  color: var(--green);
+  line-height: 1;
+}
+
+.stat-card.hl-yellow .stat-number { color: var(--yellow); }
+.stat-card.hl-cyan   .stat-number { color: var(--cyan); }
+
+.stat-suffix {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--gray);
+  margin-left: 5px;
+}
+
+.stat-desc {
+  font-size: 11px;
+  color: #666;
+  font-family: 'DotGothic16', sans-serif;
+  margin-top: 8px;
+  line-height: 1.55;
+}
+
+.score-narrative {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  padding: 28px;
+  font-size: 14px;
+  color: var(--gray);
+  font-family: 'DotGothic16', sans-serif;
+  line-height: 1.85;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.score-narrative strong { color: var(--green); }
+
+/* ================================================
+   PRICING SECTION
+   ================================================ */
+#pricing {
+  padding: 64px 16px 48px;
+  position: relative;
+  z-index: 1;
+}
+
+.pricing-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.pricing-card {
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+}
+
+.pricing-card.featured {
+  border-color: var(--yellow);
+  box-shadow: 0 0 16px rgba(255,230,0,0.15);
+}
+
+.pricing-card.featured::before {
+  content: '★ RECOMMEND';
+  position: absolute;
+  top: -12px; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: var(--yellow);
+  background: var(--bg);
+  padding: 3px 12px;
+  border: 1px solid var(--yellow);
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+}
+
+.pricing-tier {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  color: var(--gray);
+  letter-spacing: 0.15em;
+}
+
+.pricing-name {
+  font-family: 'DotGothic16', sans-serif;
+  font-size: 20px;
+  color: #fff;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.pricing-range {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(11px, 2.5vw, 14px);
+  color: var(--yellow);
+  line-height: 1.4;
+}
+
+.pricing-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  flex: 1;
+}
+
+.pricing-features li {
+  font-family: 'DotGothic16', sans-serif;
+  font-size: 13px;
+  color: var(--gray);
+  padding-left: 18px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.pricing-features li::before {
+  content: '▶';
+  position: absolute;
+  left: 0;
+  color: var(--green);
+  font-size: 9px;
+  top: 3px;
+}
+
+.pricing-note {
+  font-size: 11px;
+  color: #555;
+  font-family: 'DotGothic16', sans-serif;
+  line-height: 1.55;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.pricing-disclaimer {
+  text-align: center;
+  font-size: 11px;
+  color: #444;
+  font-family: 'DotGothic16', sans-serif;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* ================================================
+   CTA SECTION
+   ================================================ */
+#contact {
+  padding: 64px 16px 48px;
+  background: var(--bg2);
+  position: relative;
+  z-index: 1;
+}
+
+.contact-inner {
+  max-width: 580px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.contact-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(10px, 2.5vw, 15px);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.contact-sub {
+  font-size: 14px;
+  color: var(--gray);
+  font-family: 'DotGothic16', sans-serif;
+  margin-bottom: 40px;
+  line-height: 1.8;
+}
+
+/* Primary CTA */
+.cta-primary {
+  display: block;
+  width: 100%;
+  padding: 20px 16px;
+  text-decoration: none;
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(10px, 2.5vw, 13px);
+  color: var(--bg);
+  background: var(--green);
+  border: 2px solid var(--green);
+  text-align: center;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.1s;
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+  line-height: 1.6;
+  animation: glow-pulse-green 2.5s ease-in-out infinite;
+}
+
+.cta-primary:hover:not([aria-disabled="true"]) {
+  box-shadow: 0 0 40px rgba(0,255,65,0.6);
+  transform: translateY(-2px);
+}
+
+.cta-primary[aria-disabled="true"] {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+  animation: none;
+}
+
+.cta-preparing-badge {
+  font-size: 9px;
+  color: var(--orange);
+  font-family: 'Press Start 2P', monospace;
+  display: block;
+  margin-bottom: 20px;
+  letter-spacing: 0.05em;
+}
+
+/* Secondary CTAs */
+.cta-secondary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cta-secondary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 10px;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  color: var(--gray);
+  font-family: 'DotGothic16', sans-serif;
+  font-size: 12px;
+  transition: border-color 0.2s, color 0.2s;
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.cta-secondary:hover:not([aria-disabled="true"]) {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+.cta-secondary[aria-disabled="true"] {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.cta-sec-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  color: var(--gray);
+}
+
+.cta-preparing-sm {
+  font-size: 9px;
+  color: var(--orange);
+  font-family: 'DotGothic16', sans-serif;
+}
+
+.contact-note {
+  margin-top: 36px;
+  font-size: 11px;
+  color: #444;
+  font-family: 'DotGothic16', sans-serif;
+  line-height: 1.75;
+}
+
+/* ================================================
+   FOOTER
+   ================================================ */
+footer {
+  padding: 28px 16px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  font-family: 'DotGothic16', sans-serif;
+}
+
+.footer-logo {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--border);
+  margin-bottom: 10px;
+  letter-spacing: 0.1em;
+}
+
+.footer-copy {
+  font-size: 11px;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.footer-keywords {
+  font-size: 10px;
+  color: #2a2a2a;
+}
+
+/* ================================================
+   ACCESSIBILITY
+   ================================================ */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+a.sr-only:focus,
+a.sr-only:focus-within {
+  position: fixed;
+  top: 8px; left: 8px;
+  width: auto; height: auto;
+  padding: 8px 16px;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  background: var(--yellow);
+  color: var(--bg);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  z-index: 99999;
+  border: 2px solid var(--bg);
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+/* ================================================
+   RESPONSIVE ADJUSTMENTS
+   ================================================ */
+@media (max-width: 480px) {
+  .hero-hud { font-size: 7px; padding: 8px 12px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .cta-secondary-grid { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .services-grid { grid-template-columns: 1fr; }
+}
+
+/* ================================================
+   REDUCED MOTION
+   ================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .crt-wrap::before { display: none; }
+  #stars-bg { display: none; }
+}
+
+/* ================================================
+   SCROLL REVEAL BASE
+   ================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* ================================================
+   PORTFOLIO ROUTE SCREENS
+   ================================================ */
+.app-shell {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+body.portfolio-mode > #hero:not(.app-screen),
+body.portfolio-mode > #game-stage,
+body.portfolio-mode > #services,
+body.portfolio-mode > #scoreboard,
+body.portfolio-mode > #pricing,
+body.portfolio-mode > #contact,
+body.portfolio-mode > footer:not(.portfolio-footer),
+body.portfolio-mode > .pixel-hr {
+  display: none !important;
+}
+
+.app-screen {
+  display: none;
+  min-height: 100svh;
+  padding: 82px 16px 40px;
+  position: relative;
+}
+
+.app-screen.active {
+  display: block;
+  animation: screen-pop 0.22s steps(2, end);
+}
+
+@keyframes screen-pop {
+  0% { opacity: 0; filter: brightness(2); transform: translateY(8px); }
+  50% { opacity: 1; filter: brightness(0.45); }
+  100% { opacity: 1; filter: brightness(1); transform: translateY(0); }
+}
+
+#portfolio-home.app-screen {
+  display: none;
+}
+
+#portfolio-home.app-screen.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 18%, rgba(0,212,255,0.08), transparent 54%), var(--bg);
+}
+
+.portfolio-footer {
+  position: relative;
+  z-index: 1;
+  padding: 22px 16px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  color: #444;
+  font-size: 11px;
+}
+
+.portfolio-footer strong {
+  color: var(--green);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+}
+
+.home-copy-ja {
+  max-width: 600px;
+  margin: 0 auto 16px;
+  font-size: clamp(14px, 3.5vw, 18px);
+  color: #f2f2f2;
+  line-height: 1.8;
+}
+
+.home-copy-sub {
+  max-width: 560px;
+  margin: 0 auto 32px;
+  font-size: 13px;
+  color: var(--gray);
+  line-height: 1.75;
+}
+
+.hero-player-wrap.is-pressing #portfolio-hero-sprite {
+  animation: press-enter 0.44s steps(2, end) 2;
+}
+
+@keyframes press-enter {
+  0%, 100% { transform: translateY(0); filter: drop-shadow(0 0 10px var(--yellow)); }
+  50% { transform: translateY(4px); filter: drop-shadow(0 0 22px var(--yellow)); }
+}
+
+.boot-panel {
+  display: none;
+  width: min(560px, 100%);
+  margin: 22px auto 0;
+  padding: 14px;
+  border: 2px solid var(--green);
+  background: rgba(0, 0, 0, 0.78);
+  color: var(--green);
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(8px, 2.6vw, 11px);
+  line-height: 1.8;
+  text-align: left;
+  box-shadow: 0 0 18px rgba(0,255,65,0.22);
+}
+
+.boot-panel.active {
+  display: block;
+}
+
+.boot-line {
+  min-height: 1.8em;
+}
+
+.boot-flash {
+  animation: boot-flash 0.16s steps(1, end) 3;
+}
+
+@keyframes boot-flash {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(2.3); }
+}
+
+.scroll-arrow {
+  display: none;
+}
+
+.top-nav {
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  max-width: 100vw;
+  background: rgba(0,0,0,0.92);
+  border-bottom: 2px solid var(--border);
+  padding: 10px 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+
+.top-nav.active {
+  display: block;
+}
+
+.top-nav-inner {
+  width: max-content;
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.top-nav-title {
+  flex: 0 0 auto;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: var(--green);
+  margin-right: 8px;
+  text-shadow: 0 0 8px rgba(0,255,65,0.45);
+}
+
+.nav-btn {
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--gray);
+  cursor: pointer;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  padding: 9px 10px;
+  line-height: 1;
+}
+
+.nav-btn:hover,
+.nav-btn:focus,
+.nav-btn.active {
+  border-color: var(--yellow);
+  color: var(--yellow);
+  box-shadow: 0 0 12px rgba(255,230,0,0.18);
+}
+
+.page-inner {
+  width: min(960px, 100%);
+  margin: 0 auto;
+}
+
+.page-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(15px, 4vw, 24px);
+  color: var(--green);
+  line-height: 1.6;
+  margin-bottom: 14px;
+  text-shadow: 0 0 12px rgba(0,255,65,0.35);
+}
+
+.page-lead {
+  color: var(--gray);
+  font-size: clamp(14px, 3vw, 17px);
+  line-height: 1.85;
+  margin-bottom: 28px;
+  max-width: 760px;
+}
+
+.retro-panel {
+  background: rgba(17,17,17,0.96);
+  border: 2px solid var(--border);
+  padding: clamp(18px, 4vw, 28px);
+}
+
+.two-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.pixel-btn {
+  min-height: 48px;
+  border: 2px solid var(--cyan);
+  background: transparent;
+  color: var(--cyan);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 16px;
+  text-decoration: none;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  line-height: 1.5;
+}
+
+.pixel-btn.primary {
+  border-color: var(--yellow);
+  color: var(--bg);
+  background: var(--yellow);
+}
+
+.pixel-btn:hover,
+.pixel-btn:focus {
+  box-shadow: 0 0 18px rgba(0,212,255,0.28);
+}
+
+.pixel-btn[aria-disabled="true"] {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.menu-shell {
+  display: grid;
+  gap: 16px;
+  align-items: start;
+}
+
+.menu-heading {
+  text-align: center;
+  color: var(--yellow);
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(12px, 3vw, 18px);
+  line-height: 1.6;
+}
+
+.menu-sub {
+  text-align: center;
+  color: var(--gray);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.menu-access-list {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+  max-width: 840px;
+  margin: 0 auto;
+}
+
+.menu-access-list button {
+  min-height: 52px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+  color: var(--gray);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  cursor: pointer;
+}
+
+.menu-access-list button:hover,
+.menu-access-list button:focus {
+  border-color: var(--yellow);
+  color: var(--yellow);
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.info-card {
+  border: 2px solid var(--border);
+  background: var(--card-bg);
+  padding: 18px;
+}
+
+.info-card h3 {
+  color: var(--cyan);
+  font-family: 'DotGothic16', sans-serif;
+  font-size: 18px;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.info-card p,
+.info-card li {
+  color: var(--gray);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.info-card ul {
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.info-card li::before {
+  content: '▶ ';
+  color: var(--green);
+}
+
+.pricing-list {
+  display: grid;
+  gap: 10px;
+}
+
+.price-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  border-bottom: 1px dashed var(--border);
+  padding: 12px 0;
+}
+
+.price-row strong {
+  color: #fff;
+  font-size: 15px;
+}
+
+.price-row span {
+  color: var(--yellow);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.chat-window {
+  display: grid;
+  gap: 16px;
+  max-width: 820px;
+}
+
+.bot-message {
+  border: 2px solid var(--green);
+  background: rgba(0,255,65,0.05);
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.bot-icon {
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 8px var(--yellow));
+}
+
+.bot-text {
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.choice-btn {
+  min-height: 48px;
+  border: 2px solid var(--border);
+  background: var(--card-bg);
+  color: var(--gray);
+  cursor: pointer;
+  padding: 12px;
+  font-size: 13px;
+  text-align: left;
+}
+
+.choice-btn:hover,
+.choice-btn:focus,
+.choice-btn.selected {
+  border-color: var(--yellow);
+  color: var(--yellow);
+}
+
+.free-input {
+  display: grid;
+  gap: 8px;
+}
+
+.free-input label {
+  color: var(--gray);
+  font-size: 12px;
+}
+
+.free-input input,
+.consult-text {
+  width: 100%;
+  border: 2px solid var(--border);
+  background: #050505;
+  color: #fff;
+  padding: 12px;
+  font: 14px/1.7 'DotGothic16', sans-serif;
+}
+
+.consult-text {
+  min-height: 136px;
+  resize: vertical;
+}
+
+.diagnosis-box {
+  border: 2px solid var(--yellow);
+  background: rgba(255,230,0,0.05);
+  padding: 18px;
+}
+
+.diagnosis-box h3 {
+  color: var(--yellow);
+  margin-bottom: 12px;
+}
+
+.diagnosis-box p {
+  color: var(--gray);
+  line-height: 1.8;
+  margin-bottom: 8px;
+}
+
+.copy-status {
+  min-height: 1.4em;
+  color: var(--green);
+  font-size: 12px;
+}
+
+.contact-cta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+/* ================================================
+   PUBLIC READABILITY / RELEASE FIXES
+   ================================================ */
+body.portfolio-mode {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.app-shell {
+  min-height: 100vh;
+  height: auto;
+  overflow: visible;
+}
+
+.app-screen {
+  min-height: 100svh;
+  height: auto;
+  overflow: visible;
+  padding-bottom: 72px;
+}
+
+.hud-label {
+  font-size: var(--fs-micro);
+}
+
+.hud-value,
+.hud-brand {
+  font-size: var(--fs-label);
+}
+
+.top-nav-title,
+.nav-btn {
+  font-size: var(--fs-label);
+}
+
+.nav-btn {
+  padding: 10px 12px;
+}
+
+.page-title {
+  font-size: var(--fs-title);
+}
+
+.page-lead {
+  font-size: var(--fs-body-lg);
+  line-height: 1.75;
+}
+
+.info-card p,
+.info-card li,
+.bot-text,
+.choice-btn,
+.free-input input,
+.consult-text {
+  font-size: var(--fs-body);
+}
+
+.price-row strong {
+  font-size: var(--fs-body-lg);
+}
+
+.price-row span {
+  font-size: 12px;
+}
+
+.contact-note,
+.footer-copy,
+.portfolio-footer {
+  font-size: var(--fs-small);
+}
+
+.pixel-btn {
+  font-size: 13px;
+}
+
+.consult-text {
+  min-height: 118px;
+}
+
+@media (min-width: 900px) {
+  body.portfolio-mode {
+    height: auto;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .app-shell {
+    min-height: 100vh;
+    height: auto;
+    overflow: visible;
+  }
+
+  .top-nav {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 10px 14px;
+  }
+
+  .portfolio-footer {
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 18px 16px;
+    background: rgba(0,0,0,0.88);
+  }
+
+  .portfolio-footer strong {
+    display: inline;
+  }
+
+  .app-screen {
+    min-height: calc(100svh - 50px);
+    height: auto;
+    overflow: visible;
+    padding: 46px 22px 58px;
+  }
+
+  #portfolio-home.app-screen {
+    padding-top: 72px;
+  }
+
+  .hero-hud {
+    padding: 8px 18px;
+  }
+
+  .hero-content {
+    max-width: 720px;
+  }
+
+  .game-logo-text {
+    margin-bottom: 14px;
+    font-size: clamp(10px, 1.6vw, 16px);
+  }
+
+  .hero-tagline {
+    margin-bottom: 10px;
+    font-size: clamp(28px, 3.2vw, 42px);
+    line-height: 1.22;
+  }
+
+  .hero-sub {
+    margin-bottom: 18px;
+    font-size: clamp(13px, 1.5vw, 17px);
+    line-height: 1.55;
+  }
+
+  .home-copy-ja {
+    margin-bottom: 8px;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .home-copy-sub {
+    margin-bottom: 14px;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .hero-player-wrap {
+    margin-bottom: 18px;
+    gap: 6px;
+  }
+
+  #portfolio-hero-sprite {
+    width: 70px;
+    height: 70px;
+  }
+
+  .press-start-btn {
+    padding: 13px 26px;
+  }
+
+  .press-start-hint {
+    margin-top: 6px;
+  }
+
+  .boot-panel {
+    margin-top: 12px;
+    padding: 10px;
+  }
+
+  .hero-tags {
+    margin-top: 16px;
+  }
+
+  .page-inner {
+    width: min(1180px, 100%);
+  }
+
+  .page-title {
+    font-size: clamp(18px, 2vw, 24px);
+    line-height: 1.35;
+    margin-bottom: 8px;
+  }
+
+  .page-lead {
+    font-size: 16px;
+    line-height: 1.65;
+    margin-bottom: 16px;
+    max-width: 900px;
+  }
+
+  .retro-panel {
+    padding: 18px;
+  }
+
+  .two-cta {
+    margin-top: 14px;
+    gap: 10px;
+  }
+
+  .pixel-btn {
+    min-height: 42px;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .menu-shell {
+    gap: 10px;
+    width: min(760px, 100%);
+  }
+
+  .menu-heading {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .menu-sub {
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .menu-shell .game-hud-bar {
+    padding: 6px 14px;
+  }
+
+  .menu-shell .canvas-wrap {
+    max-width: 600px;
+  }
+
+  .menu-access-list {
+    max-width: 720px;
+    gap: 6px;
+  }
+
+  .menu-access-list button {
+    min-height: 40px;
+    font-size: 7px;
+  }
+
+  .game-pc-hint {
+    padding-top: 2px;
+    font-size: 10px;
+  }
+
+  .content-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  [data-page="about"] .content-grid,
+  [data-page="works"] .content-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .info-card {
+    padding: 12px;
+  }
+
+  .info-card h3 {
+    font-size: 17px;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+
+  .info-card p,
+  .info-card li {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .info-card ul {
+    gap: 5px;
+  }
+
+  .pricing-list {
+    gap: 4px;
+  }
+
+  .price-row {
+    padding: 8px 0;
+  }
+
+  .price-row strong {
+    font-size: 16px;
+  }
+
+  .price-row span {
+    font-size: 12px;
+  }
+
+  .chat-window {
+    max-width: 1000px;
+    gap: 10px;
+  }
+
+  .bot-message,
+  .diagnosis-box {
+    padding: 12px;
+  }
+
+  .bot-icon {
+    flex-basis: 34px;
+    width: 34px;
+    height: 34px;
+  }
+
+  .bot-text {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .choice-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .choice-btn {
+    min-height: 44px;
+    padding: 9px 10px;
+    font-size: 14px;
+  }
+
+  .free-input {
+    gap: 5px;
+  }
+
+  .free-input input,
+  .consult-text {
+    padding: 9px 10px;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .consult-text {
+    min-height: 90px;
+  }
+
+  .diagnosis-box p {
+    line-height: 1.45;
+    margin-bottom: 5px;
+  }
+
+  .contact-cta-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .app-screen { padding: 72px 12px 28px; }
+  .hero-content { max-width: 100%; }
+  .game-logo-text { font-size: 10px; margin-bottom: 18px; }
+  .hero-tagline { font-size: clamp(22px, 8vw, 34px); }
+  .menu-access-list { grid-template-columns: repeat(2, 1fr); }
+  .mobile-controls { gap: 8px; padding: 12px 4px; }
+  .mob-btn { min-width: 0; flex: 1; padding: 16px 8px; font-size: 9px; }
+  .price-row { grid-template-columns: 1fr; }
+  .price-row span { white-space: normal; }
+}
+
+@media (max-width: 480px) {
+  .hud-label { font-size: 9px; }
+  .hud-value,
+  .hud-brand { font-size: 10px; }
+  .top-nav-title,
+  .nav-btn { font-size: 10px; }
+  .nav-btn { padding: 10px 11px; }
+  .page-lead { font-size: 15px; }
+  .info-card p,
+  .info-card li,
+  .bot-text,
+  .choice-btn,
+  .free-input input,
+  .consult-text {
+    font-size: 14px;
+  }
+  .pixel-btn {
+    font-size: 13px;
+  }
+}
+</style>
+</head>
+<body class="portfolio-mode">
+
+<!-- Accessibility: skip to app -->
+<a href="#portfolio-app" class="sr-only">ポートフォリオ画面へスキップ</a>
+
+<!-- Stars background (generated by JS) -->
+<div id="stars-bg" aria-hidden="true"></div>
+
+<!-- Hidden sprite images (base64 injected by build script if available) -->
+<img id="kkimg-stand" data-placeholder="__SPRITE_STAND__" style="display:none" alt="">
+<img id="kkimg-wave"  data-placeholder="__SPRITE_WAVE__"  style="display:none" alt="">
+<img id="kkimg-walk"  data-placeholder="__SPRITE_WALK__"  style="display:none" alt="">
+
+<nav id="top-nav" class="top-nav" aria-label="ポートフォリオ上部ナビ">
+  <div class="top-nav-inner">
+    <span class="top-nav-title">FORNUS PORTFOLIO</span>
+    <button class="nav-btn" type="button" data-route="menu" aria-label="ゲームメニューへ戻る">[MENU]</button>
+    <button class="nav-btn" type="button" data-route="about" aria-label="ABOUTページへ">[ABOUT]</button>
+    <button class="nav-btn" type="button" data-route="services" aria-label="SERVICESページへ">[SERVICES]</button>
+    <button class="nav-btn" type="button" data-route="works" aria-label="WORKSページへ">[WORKS]</button>
+    <button class="nav-btn" type="button" data-route="pricing" aria-label="PRICINGページへ">[PRICING]</button>
+    <button class="nav-btn" type="button" data-route="chatbot" aria-label="CHATBOTページへ">[BOT]</button>
+    <button class="nav-btn" type="button" data-route="contact" aria-label="CONTACTページへ">[CONTACT]</button>
+  </div>
+</nav>
+
+<main class="app-shell" id="portfolio-app">
+  <section id="portfolio-home" class="app-screen active crt-wrap" data-page="home" aria-label="Fornus Portfolio ヒーロー">
+    <div class="hero-hud" role="status" aria-label="ポートフォリオステータス">
+      <div class="hud-item"><span class="hud-label">MODE</span><span class="hud-value">PORTFOLIO</span></div>
+      <div class="hud-item"><span class="hud-label">SKILL</span><span class="hud-value">AI/GAS/WEB</span></div>
+      <div class="hud-item"><span class="hud-brand">KATAKATA INVADERS MODE</span></div>
+      <div class="hud-item"><span class="hud-label">READY</span><span class="hud-value">2026</span></div>
+    </div>
+
+    <div class="hero-content">
+      <span class="game-logo-text" aria-label="KATAKATA INVADERS MODE">KATAKATA INVADERS MODE</span>
+      <h1 class="hero-tagline">WELCOME TO<br>FORNUS PORTFOLIO</h1>
+      <p class="hero-sub">AI / GAS / WEB APP<br>AUTOMATION WORKS</p>
+      <p class="home-copy-ja">
+        現場の手作業を、仕組みで減らす。<br>
+        AI・GAS・Webアプリで、小さく作って実務で使える形にします。
+      </p>
+      <p class="home-copy-sub">ゲームを始めるように、制作実績と対応メニューを選んでください。</p>
+
+      <div class="hero-player-wrap" id="portfolio-hero-player">
+        <img id="portfolio-hero-sprite" src="" alt="カタカタくん（主人公）" role="img" width="72" height="72">
+        <span class="hero-sprite-name">— カタカタくん —</span>
+      </div>
+
+      <button id="portfolio-start-btn" class="press-start-btn" aria-label="PRESS STARTでポートフォリオを起動する" type="button">
+        ▶ PRESS START
+      </button>
+      <p class="press-start-hint">タップするとカタカタくんがEnterを押します</p>
+
+      <div class="boot-panel" id="boot-panel" aria-live="polite">
+        <div class="boot-line" id="boot-line">SYSTEM WAITING...</div>
+      </div>
+
+      <div class="hero-tags" aria-label="対応スキル・サービス">
+        <span class="hero-tag">#GAS自動化</span>
+        <span class="hero-tag">#AI業務改善</span>
+        <span class="hero-tag">#Webアプリ</span>
+        <span class="hero-tag">#LP制作</span>
+        <span class="hero-tag">#製造業12年</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="app-screen" data-page="menu" aria-label="Game Menu">
+    <div class="page-inner menu-shell">
+      <h2 class="menu-heading">GAME MENU<br>SELECT PORTFOLIO STAGE</h2>
+      <p class="menu-sub">左右移動してFIRE。メニューを撃つか、下のボタンをタップしてください。</p>
+
+      <div class="game-hud-bar" role="status" aria-live="polite">
+        <div class="game-stat-item"><span class="game-stat-label">PLAYER</span><span class="game-stat-value">KATAKATA</span></div>
+        <div class="game-stat-item"><span class="game-stat-label">TARGET</span><span class="game-stat-value" id="menu-target">MENU</span></div>
+        <div class="game-stat-item"><span class="game-stat-label">STATUS</span><span class="game-stat-value game-cleared-val" id="menu-status">READY</span></div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="menuCanvas" width="640" height="420" role="application" aria-label="ゲームメニュー。左右キーまたはLEFT RIGHTで移動、FIREでメニューを選択できます。"></canvas>
+        <div class="canvas-scanlines" aria-hidden="true"></div>
+      </div>
+
+      <div class="mobile-controls" role="group" aria-label="タッチ操作ボタン">
+        <button id="menu-btn-left" class="mob-btn mob-btn-lr" aria-label="左に移動" type="button">◀ LEFT</button>
+        <button id="menu-btn-fire" class="mob-btn mob-btn-fire" aria-label="発射して選択" type="button">▲ FIRE</button>
+        <button id="menu-btn-right" class="mob-btn mob-btn-lr" aria-label="右に移動" type="button">RIGHT ▶</button>
+      </div>
+      <p class="game-pc-hint">PC操作：ArrowLeft / ArrowRight / A / D で移動、Space / Enter で発射</p>
+
+      <div class="menu-access-list" aria-label="タップでも開けるメニュー">
+        <button type="button" data-route="about">ABOUT</button>
+        <button type="button" data-route="services">SERVICES</button>
+        <button type="button" data-route="works">WORKS</button>
+        <button type="button" data-route="pricing">PRICING</button>
+        <button type="button" data-route="chatbot">CHATBOT</button>
+        <button type="button" data-route="contact">CONTACT</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="app-screen" data-page="about" aria-label="ABOUT FORNUS">
+    <div class="page-inner">
+      <h2 class="page-title">ABOUT FORNUS</h2>
+      <p class="page-lead">Fornusは、AI・GAS・Webアプリを使って、個人事業主・小規模事業者の手作業を減らす制作ポートフォリオです。</p>
+      <div class="content-grid">
+        <article class="info-card"><h3>現場を知る制作</h3><ul><li>製造業12年</li><li>最大14名規模のライン管理</li><li>現場改善・品質改善・人材育成</li></ul></article>
+        <article class="info-card"><h3>小さく作る</h3><ul><li>生成AIを使った業務改善へ展開</li><li>難しいIT用語を使わず、現場の言葉で整理</li><li>小さく作って、実務で使える形にする</li></ul></article>
+      </div>
+      <div class="two-cta">
+        <button class="pixel-btn primary" type="button" data-route="services">できることを見る</button>
+        <button class="pixel-btn" type="button" data-route="chatbot">簡易見積もりへ</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="app-screen" data-page="services" aria-label="SERVICES">
+    <div class="page-inner">
+      <h2 class="page-title">SERVICES</h2>
+      <p class="page-lead">相談時は、今使っている資料・手作業の流れ・毎月の作業回数が分かると早く判断できます。</p>
+      <div class="content-grid" id="service-list"></div>
+    </div>
+  </section>
+
+  <section class="app-screen" data-page="works" aria-label="WORKS PORTFOLIO">
+    <div class="page-inner">
+      <h2 class="page-title">WORKS / PORTFOLIO</h2>
+      <p class="page-lead">遊びの演出だけではなく、業務改善として何を減らすかが分かる制作実績です。</p>
+      <div class="content-grid" id="works-list"></div>
+    </div>
+  </section>
+
+  <section class="app-screen" data-page="pricing" aria-label="PRICING">
+    <div class="page-inner">
+      <h2 class="page-title">PRICING</h2>
+      <div class="retro-panel">
+        <div class="pricing-list">
+          <div class="price-row"><strong>スポット相談</strong><span>無料</span></div>
+          <div class="price-row"><strong>小規模自動化</strong><span>15,000円〜</span></div>
+          <div class="price-row"><strong>GAS / スプレッドシート自動化</strong><span>30,000円〜</span></div>
+          <div class="price-row"><strong>LP / ホームページ制作</strong><span>50,000円〜</span></div>
+          <div class="price-row"><strong>Webアプリ / 管理画面</strong><span>80,000円〜</span></div>
+          <div class="price-row"><strong>AI活用・プロンプト設計</strong><span>5,000円〜/時間</span></div>
+        </div>
+        <p class="page-lead" style="margin:22px 0 0;">金額は目安です。内容により変動します。まずは小さく試せる形で提案します。</p>
+      </div>
+      <div class="two-cta">
+        <button class="pixel-btn primary" type="button" data-route="chatbot">簡易見積もりを試す</button>
+        <button class="pixel-btn" type="button" data-route="contact">相談する</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="app-screen" data-page="chatbot" aria-label="KATAKATA BOT">
+    <div class="page-inner">
+      <h2 class="page-title">KATAKATA BOT</h2>
+      <div class="chat-window retro-panel">
+        <div class="bot-message">
+          <img id="bot-icon" class="bot-icon" src="" alt="カタカタくんアイコン">
+          <div class="bot-text" id="bot-message">自動化できるか、ざっくり診断します。近いものを選んでください。</div>
+        </div>
+        <div id="chat-choices" class="choice-grid"></div>
+        <div class="free-input">
+          <label for="free-note">補足があれば入力できます（任意）</label>
+          <input id="free-note" type="text" placeholder="例：毎月20件くらい請求書を作っています">
+        </div>
+        <div id="diagnosis-result" class="diagnosis-box" hidden></div>
+        <textarea id="consult-text" class="consult-text" readonly placeholder="診断後、相談文がここに表示されます"></textarea>
+        <div class="two-cta">
+          <button id="copy-consult" class="pixel-btn primary" type="button" aria-label="相談文をコピーする">コピー</button>
+          <a class="pixel-btn js-cta" data-link-key="line">この内容で相談する</a>
+          <button id="reset-chat" class="pixel-btn" type="button">最初から</button>
+        </div>
+        <p class="copy-status" id="copy-status" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="app-screen" data-page="contact" aria-label="CONTACT">
+    <div class="page-inner">
+      <h2 class="page-title">CONTACT</h2>
+      <p class="page-lead">まずは無料相談から。URL未設定のリンクは準備中として無効化しています。</p>
+      <div class="contact-cta-grid">
+        <a class="pixel-btn primary js-cta" data-link-key="line">LINEで相談する</a>
+        <a class="pixel-btn js-cta" data-link-key="coconala">ココナラで相談する</a>
+        <a class="pixel-btn js-cta" data-link-key="lancers">ランサーズで依頼する</a>
+        <a class="pixel-btn js-cta" data-link-key="twitter">Xを見る</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="portfolio-footer">
+  <strong>FORNUS PORTFOLIO</strong><br>
+  © 2026 Fornus — AI・GAS・Webアプリで手作業を自動化する
+</footer>
+
+<!-- ==================================================
+     HERO SECTION
+     ================================================== -->
+<section id="hero" class="crt-wrap" aria-label="ヒーローエリア">
+
+  <!-- HUD bar -->
+  <div class="hero-hud" role="status" aria-label="ゲームスコア表示">
+    <div class="hud-item">
+      <span class="hud-label">SCORE</span>
+      <span class="hud-value" id="hero-score-val">00000</span>
+    </div>
+    <div class="hud-item">
+      <span class="hud-label">STAGE</span>
+      <span class="hud-value">01</span>
+    </div>
+    <div class="hud-item">
+      <span class="hud-brand">KATAKATA INVADERS</span>
+    </div>
+    <div class="hud-item">
+      <span class="hud-label">LIFE</span>
+      <span class="hud-value" id="hero-life-val">♥♥♥</span>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="hero-content">
+
+    <span class="game-logo-text" aria-label="KATAKATA INVADERS">
+      KATAKATA<br>INVADERS
+    </span>
+
+    <h1 class="hero-tagline">
+      まだカタカタ<br>やってるんですか？
+    </h1>
+
+    <p class="hero-sub">
+      AI・GAS・Webアプリで、<br>
+      面倒な手作業を撃ち落とす。
+    </p>
+
+    <!-- Player -->
+    <div class="hero-player-wrap">
+      <img id="hero-sprite" src="" alt="カタカタくん（主人公）" role="img" width="72" height="72">
+      <span class="hero-sprite-name">— カタカタくん —</span>
+    </div>
+
+    <!-- PRESS START -->
+    <button id="press-start-btn"
+            class="press-start-btn"
+            aria-label="ゲームを開始してサービス一覧を確認する"
+            type="button">
+      ▶ PRESS START
+    </button>
+    <p class="press-start-hint">クリック・タップでゲームスタート</p>
+
+    <!-- Tags -->
+    <div class="hero-tags" aria-label="対応スキル・サービス">
+      <span class="hero-tag">#GAS自動化</span>
+      <span class="hero-tag">#スプレッドシート</span>
+      <span class="hero-tag">#Webアプリ</span>
+      <span class="hero-tag">#AI活用</span>
+      <span class="hero-tag">#LINE連携</span>
+      <span class="hero-tag">#製造業12年</span>
+      <span class="hero-tag">#小さく始める</span>
+    </div>
+
+  </div>
+
+  <!-- Scroll arrow -->
+  <div class="scroll-arrow" aria-hidden="true">▼ SCROLL</div>
+
+</section>
+
+<hr class="pixel-hr">
+
+<!-- ==================================================
+     GAME STAGE SECTION
+     ================================================== -->
+<section id="game-stage" aria-label="ゲームステージ — 手作業タスクを撃ち落とそう">
+
+  <!-- Game HUD -->
+  <div class="game-hud-bar" role="status" aria-live="polite">
+    <div class="game-stat-item">
+      <span class="game-stat-label">SCORE</span>
+      <span class="game-stat-value" id="g-score">00000</span>
+    </div>
+    <div class="game-stat-item">
+      <span class="game-stat-label">STAGE</span>
+      <span class="game-stat-value">01</span>
+    </div>
+    <div class="game-stat-item">
+      <span class="game-stat-label">LIFE</span>
+      <span class="game-stat-value" id="g-life">♥♥♥</span>
+    </div>
+    <div class="game-stat-item">
+      <span class="game-stat-label">CLEARED</span>
+      <span class="game-stat-value game-cleared-val" id="g-cleared">0 / 8</span>
+    </div>
+  </div>
+
+  <!-- Canvas -->
+  <div class="canvas-wrap">
+    <canvas id="gameCanvas"
+            width="640"
+            height="400"
+            role="application"
+            aria-label="KATAKATA INVADERSゲームエリア。← →で移動、スペースで発射。敵タスクを撃ち落とすとサービス説明が表示されます。">
+    </canvas>
+    <div class="canvas-scanlines" aria-hidden="true"></div>
+  </div>
+
+  <!-- Mobile controls -->
+  <div class="mobile-controls" role="group" aria-label="タッチ操作ボタン">
+    <button id="btn-left"  class="mob-btn mob-btn-lr"   aria-label="左に移動" type="button">◀ LEFT</button>
+    <button id="btn-fire"  class="mob-btn mob-btn-fire" aria-label="発射する"  type="button">▲ FIRE</button>
+    <button id="btn-right" class="mob-btn mob-btn-lr"   aria-label="右に移動" type="button">RIGHT ▶</button>
+  </div>
+
+  <!-- PC hint -->
+  <p class="game-pc-hint" aria-label="PC操作方法">
+    PC操作：← → キーで移動 ／ スペース・Enter で発射
+  </p>
+
+  <!-- Skip hint -->
+  <p class="game-skip-hint" aria-hidden="true">
+    ゲームをスキップして下にスクロールすると、すべてのサービス説明を読めます ▼
+  </p>
+
+</section>
+
+<hr class="pixel-hr">
+
+<!-- ==================================================
+     SERVICES SECTION
+     ================================================== -->
+<section id="services" aria-label="サービス一覧">
+
+  <div class="section-header">
+    <h2 class="section-title text-green glow-green">[ SERVICES ]</h2>
+    <p class="section-sub">
+      撃ち落とした手作業タスクが、どう変わるかを確認してください。<br>
+      ゲームをスキップして「すべて表示」を押しても読めます。
+    </p>
+  </div>
+
+  <div class="services-grid">
+
+    <!-- Card 0: 転記作業 -->
+    <article class="service-card" id="svc-0" aria-label="転記作業の自動化サービス">
+      <div class="sc-task">⚡ 転記作業</div>
+      <h3 class="sc-title">GAS / スプレッドシート自動化</h3>
+      <p class="sc-effect">
+        <strong>毎日の転記を、ボタン1つの処理に変えます。</strong><br>
+        Googleフォームやスプレッドシート・Excelを連携し、コピペ作業をゼロにします。ミスも減り、時間も空きます。
+      </p>
+      <div class="sc-target">
+        📌 毎朝同じシートにデータを貼り付けている ／ 転記ミスが怖い
+      </div>
+      <p class="sc-cta">
+        💬「今使っているシートを見せてもらえれば、小さく改善案を出せます。」
+      </p>
+    </article>
+
+    <!-- Card 1: 集計作業 -->
+    <article class="service-card" id="svc-1" aria-label="集計作業の自動化サービス">
+      <div class="sc-task">⚡ 集計作業</div>
+      <h3 class="sc-title">自動レポート / ダッシュボード</h3>
+      <p class="sc-effect">
+        <strong>週次・月次の集計レポートを自動生成します。</strong><br>
+        売上・在庫・稼働率などをスプレッドシートやWebで自動更新。会議前の資料作りが不要になります。
+      </p>
+      <div class="sc-target">
+        📌 毎週同じ集計をしている ／ 数字をグラフにする時間がない
+      </div>
+      <p class="sc-cta">
+        💬「何を集計しているか教えてもらえれば、自動化できるか判断します。」
+      </p>
+    </article>
+
+    <!-- Card 2: 予約管理 -->
+    <article class="service-card" id="svc-2" aria-label="予約管理の自動化サービス">
+      <div class="sc-task">⚡ 予約管理</div>
+      <h3 class="sc-title">小規模業務アプリ</h3>
+      <p class="sc-effect">
+        <strong>予約・スケジュールをWebアプリで一元管理します。</strong><br>
+        Excelや紙管理から脱却し、スマホから確認・更新できる仕組みを小さく作ります。
+      </p>
+      <div class="sc-target">
+        📌 予約を電話やLINEで受けてメモしている ／ 二重予約が起きる
+      </div>
+      <p class="sc-cta">
+        💬「まず現状の管理方法を教えてください。最小構成から始められます。」
+      </p>
+    </article>
+
+    <!-- Card 3: 在庫管理 -->
+    <article class="service-card" id="svc-3" aria-label="在庫管理の自動化サービス">
+      <div class="sc-task">⚡ 在庫管理</div>
+      <h3 class="sc-title">管理画面 / 入出庫管理</h3>
+      <p class="sc-effect">
+        <strong>在庫の入出庫をWebアプリで記録・可視化します。</strong><br>
+        数量入力から在庫数を自動計算し、低在庫アラートも設定できます。棚卸しが楽になります。
+      </p>
+      <div class="sc-target">
+        📌 在庫数をExcelで管理している ／ 棚卸しに時間がかかる
+      </div>
+      <p class="sc-cta">
+        💬「管理している品目数と今の管理方法を教えてもらえれば見積もり出せます。」
+      </p>
+    </article>
+
+    <!-- Card 4: SNS投稿 -->
+    <article class="service-card" id="svc-4" aria-label="SNS投稿管理の自動化サービス">
+      <div class="sc-task">⚡ SNS投稿</div>
+      <h3 class="sc-title">投稿文生成 / 投稿管理</h3>
+      <p class="sc-effect">
+        <strong>AIで投稿文を自動生成・スケジュール管理します。</strong><br>
+        商品・サービス情報を入力するだけで、X・Instagram向けの投稿案を複数パターン生成。
+      </p>
+      <div class="sc-target">
+        📌 毎回投稿文を考えるのが手間 ／ 投稿を忘れがち
+      </div>
+      <p class="sc-cta">
+        💬「どのSNSで何を発信したいか教えてください。まず1週間分の雛形を作ります。」
+      </p>
+    </article>
+
+    <!-- Card 5: レポート作成 -->
+    <article class="service-card" id="svc-5" aria-label="レポート自動生成サービス">
+      <div class="sc-task">⚡ レポート</div>
+      <h3 class="sc-title">PDF出力 / AI要約</h3>
+      <p class="sc-effect">
+        <strong>データからレポートPDFを自動生成します。</strong><br>
+        スプレッドシートやフォームの回答をAIが要約・整形し、印刷・送付できるPDFを自動出力。
+      </p>
+      <div class="sc-target">
+        📌 毎月同じ体裁のレポートを手で作っている ／ 報告書作成が負担
+      </div>
+      <p class="sc-cta">
+        💬「どんな形式のレポートが必要か教えてもらえれば、サンプルを作って確認できます。」
+      </p>
+    </article>
+
+    <!-- Card 6: 問い合わせ -->
+    <article class="service-card" id="svc-6" aria-label="問い合わせ対応自動化サービス">
+      <div class="sc-task">⚡ 問い合わせ</div>
+      <h3 class="sc-title">LINE / メール自動返信</h3>
+      <p class="sc-effect">
+        <strong>よくある問い合わせに自動返信する仕組みを作ります。</strong><br>
+        LINEBot・Gmailと連携し、営業時間外でも即時対応。FAQ返信・予約案内も自動化できます。
+      </p>
+      <div class="sc-target">
+        📌 同じ質問が何度も来る ／ 問い合わせ対応に追われている
+      </div>
+      <p class="sc-cta">
+        💬「よく来る問い合わせを5〜10個教えてください。そこから始めます。」
+      </p>
+    </article>
+
+    <!-- Card 7: PDF作成 -->
+    <article class="service-card" id="svc-7" aria-label="書類PDF自動生成サービス">
+      <div class="sc-task">⚡ PDF作成</div>
+      <h3 class="sc-title">GAS / Webアプリで自動生成</h3>
+      <p class="sc-effect">
+        <strong>見積書・請求書・納品書をボタン1つで生成します。</strong><br>
+        GASまたはWebアプリでデータを入力するだけでPDFを生成し、メール送信まで自動化。
+      </p>
+      <div class="sc-target">
+        📌 毎回Excelで書類を手作りしている ／ 送り忘れが心配
+      </div>
+      <p class="sc-cta">
+        💬「今使っている書類のテンプレートがあれば、そのまま自動化できます。」
+      </p>
+    </article>
+
+  </div>
+
+  <!-- Show all button -->
+  <button class="show-all-btn"
+          id="show-all-btn"
+          type="button"
+          aria-label="ゲームをスキップしてすべてのサービスカードを表示する">
+    ▶ すべてのサービスを表示（ゲームをスキップ）
+  </button>
+
+</section>
+
+<hr class="pixel-hr">
+
+<!-- ==================================================
+     SCOREBOARD SECTION
+     ================================================== -->
+<section id="scoreboard" class="reveal" aria-label="実績・ハイスコアボード">
+  <div class="scoreboard-inner">
+
+    <div class="section-header">
+      <h2 class="section-title text-yellow" style="text-shadow:0 0 8px var(--yellow);">
+        [ HIGH SCORE ]
+      </h2>
+      <p class="section-sub">
+        製造現場で培った「現場を動かす力」とAI・Webの実装力。<br>
+        数字で証明する、Fornusの実績。
+      </p>
+    </div>
+
+    <div class="stats-grid">
+
+      <div class="stat-card hl-yellow">
+        <div class="stat-label">MANUFACTURING EXP</div>
+        <div>
+          <span class="stat-number">12</span>
+          <span class="stat-suffix">YRS</span>
+        </div>
+        <div class="stat-desc">製造業12年。ライン設計・改善・人材育成まで現場を担当。</div>
+      </div>
+
+      <div class="stat-card hl-cyan">
+        <div class="stat-label">TEAM MANAGED</div>
+        <div>
+          <span class="stat-number">14</span>
+          <span class="stat-suffix">PEOPLE</span>
+        </div>
+        <div class="stat-desc">最大14名規模のライン管理。目標設定・進捗管理・育成を担当。</div>
+      </div>
+
+      <div class="stat-card hl-yellow">
+        <div class="stat-label">PRODUCTIVITY UP</div>
+        <div>
+          <span class="stat-number">+1232</span>
+          <span class="stat-suffix">¥/HR</span>
+        </div>
+        <div class="stat-desc">改善施策により生産性を大幅向上。無駄を数値で追跡・削減。</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">DEFECT RATE MIN</div>
+        <div>
+          <span class="stat-number">0.08</span>
+          <span class="stat-suffix">%</span>
+        </div>
+        <div class="stat-desc">品質改善活動で達成した最低不良率。ゼロに近い水準を実現。</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">ZERO CLAIM</div>
+        <div>
+          <span class="stat-number">69</span>
+          <span class="stat-suffix">MONTHS</span>
+        </div>
+        <div class="stat-desc">メーカークレーム0件を69ヶ月継続。品質管理の徹底。</div>
+      </div>
+
+      <div class="stat-card hl-cyan">
+        <div class="stat-label">REVIEW SCORE</div>
+        <div>
+          <span class="stat-number" style="font-size:clamp(14px,3vw,18px); color:var(--yellow);">
+            ★★★★★
+          </span>
+        </div>
+        <div class="stat-desc">フリーランス案件で星5レビュー実績。継続依頼多数。</div>
+      </div>
+
+    </div>
+
+    <div class="score-narrative">
+      <p>
+        現場で働いたからこそ、<strong>「実際に使える」</strong>ものを作れます。<br><br>
+        難しいIT用語は使いません。<strong>現場の言葉で課題を整理</strong>し、
+        小さく作って試せる形で納品します。<br><br>
+        AI・GAS・Webアプリを組み合わせることで、
+        <strong>予算を抑えながら手作業を減らす</strong>仕組みを作ります。<br><br>
+        個人事業主・小規模事業者の方が
+        「ちょっと試してみたい」と思えるところから始めることが、長続きの秘訣です。
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<hr class="pixel-hr">
+
+<!-- ==================================================
+     PRICING SECTION
+     ================================================== -->
+<section id="pricing" class="reveal" aria-label="料金・サービスプラン">
+  <div class="pricing-inner">
+
+    <div class="section-header">
+      <h2 class="section-title text-cyan glow-cyan">[ PRICING ]</h2>
+      <p class="section-sub">
+        まず相談は無料。小さく始めて、必要に応じて拡張できます。
+      </p>
+    </div>
+
+    <div class="pricing-grid">
+
+      <div class="pricing-card">
+        <div class="pricing-tier">STAGE 01</div>
+        <div class="pricing-name">スポット相談</div>
+        <div class="pricing-range" style="color:var(--green);">無料</div>
+        <ul class="pricing-features">
+          <li>現状の課題ヒアリング</li>
+          <li>自動化できるか診断</li>
+          <li>改善アドバイス</li>
+          <li>見積もり提示</li>
+        </ul>
+        <div class="pricing-note">
+          まずここから。今使っているExcelやシートを見せてもらえるだけでOKです。
+        </div>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-tier">STAGE 02</div>
+        <div class="pricing-name">小規模自動化</div>
+        <div class="pricing-range">¥15,000〜</div>
+        <ul class="pricing-features">
+          <li>GAS / スプレッドシート連携</li>
+          <li>フォーム→シート自動転記</li>
+          <li>PDF・メール自動送信</li>
+          <li>LINE Bot 簡易応答</li>
+          <li>修正1回込み</li>
+        </ul>
+        <div class="pricing-note">
+          1〜2週間で納品。まず1つの手作業を解消するところから始めます。
+        </div>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-tier">STAGE 03</div>
+        <div class="pricing-name">Webアプリ / 管理画面</div>
+        <div class="pricing-range">¥50,000〜</div>
+        <ul class="pricing-features">
+          <li>オリジナルWebアプリ開発</li>
+          <li>在庫・予約・顧客管理</li>
+          <li>ダッシュボード構築</li>
+          <li>AI機能組み込み</li>
+          <li>継続メンテ対応可</li>
+        </ul>
+        <div class="pricing-note">
+          要件によって変動します。まず相談してください。
+        </div>
+      </div>
+
+    </div>
+
+    <p class="pricing-disclaimer">
+      ※ 金額はあくまで目安です。規模・内容によって変わります。まずご相談を。
+    </p>
+
+  </div>
+</section>
+
+<hr class="pixel-hr">
+
+<!-- ==================================================
+     CTA SECTION
+     ================================================== -->
+<section id="contact" class="reveal" aria-label="お問い合わせ・ご相談">
+  <div class="contact-inner">
+
+    <h2 class="contact-title text-green glow-green">
+      [ GAME CLEAR? ]<br>
+      <span style="color:var(--cyan); font-size:0.8em;">
+        まずは相談してみてください。
+      </span>
+    </h2>
+
+    <p class="contact-sub">
+      「こんなこと、自動化できる？」「うちの規模でもできる？」<br>
+      難しいことは不要です。今使っているシートや業務フローを<br>
+      見せてもらうだけで、改善案を出します。
+    </p>
+
+    <!-- Primary: LINE -->
+    <a id="cta-line"
+       href="#"
+       class="cta-primary"
+       aria-label="LINEで相談する（準備中）"
+       aria-disabled="true"
+       role="button">
+      💬 LINEで相談する（無料）
+    </a>
+    <span class="cta-preparing-badge anim-blink" id="line-badge">
+      ▶ 準備中 — もうしばらくお待ちください
+    </span>
+
+    <!-- Secondary -->
+    <div class="cta-secondary-grid">
+
+      <a id="cta-coconala"
+         href="#"
+         class="cta-secondary"
+         aria-label="ココナラで相談する（準備中）"
+         aria-disabled="true">
+        <span class="cta-sec-label">COCONALA</span>
+        <span>ココナラで相談</span>
+        <span class="cta-preparing-sm">準備中</span>
+      </a>
+
+      <a id="cta-lancers"
+         href="#"
+         class="cta-secondary"
+         aria-label="ランサーズで依頼する（準備中）"
+         aria-disabled="true">
+        <span class="cta-sec-label">LANCERS</span>
+        <span>ランサーズで依頼</span>
+        <span class="cta-preparing-sm">準備中</span>
+      </a>
+
+      <a id="cta-x"
+         href="#"
+         class="cta-secondary"
+         aria-label="Xを見る（準備中）"
+         aria-disabled="true">
+        <span class="cta-sec-label">X / TWITTER</span>
+        <span>Xを見る</span>
+        <span class="cta-preparing-sm">準備中</span>
+      </a>
+
+    </div>
+
+    <p class="contact-note">
+      ※ CTAリンクは準備中です。URLが決まり次第有効になります。<br>
+      ※ まずは気軽にご連絡ください。小さく始めることを大切にしています。
+    </p>
+
+  </div>
+</section>
+
+<!-- ==================================================
+     FOOTER
+     ================================================== -->
+<footer>
+  <p class="footer-logo">KATAKATA INVADERS</p>
+  <p class="footer-copy">© 2026 Fornus — AI・GAS・Webアプリで手作業を自動化する</p>
+  <p class="footer-keywords">個人事業主・小規模事業者向け / 転記・集計・予約・在庫・SNS・PDF自動化</p>
+</footer>
+
+<!-- ==================================================
+     JAVASCRIPT
+     ================================================== -->
+<script>
+/* ================================================
+   CTA LINK MANAGEMENT
+   URLが決まったら下記 LINKS を更新するだけ。
+   '#' のままなら自動的にdisabled表示になる。
+   ================================================ */
+const LINKS = {
+  line:     'https://lin.ee/RnwJwMO',
+  coconala: '#',   // 未設定
+  lancers:  '#',   // 未設定
+  twitter:  '#',   // 未設定
+};
+
+function isPortfolioMode() {
+  return document.body.classList.contains('portfolio-mode');
+}
+
+(function applyLinks() {
+  const config = [
+    { id: 'cta-line',     key: 'line',     badgeId: 'line-badge' },
+    { id: 'cta-coconala', key: 'coconala', badgeId: null },
+    { id: 'cta-lancers',  key: 'lancers',  badgeId: null },
+    { id: 'cta-x',        key: 'twitter',  badgeId: null },
+  ];
+
+  config.forEach(({ id, key, badgeId }) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const url = LINKS[key];
+    const isActive = url && url !== '#';
+
+    if (isActive) {
+      el.href = url;
+      el.removeAttribute('aria-disabled');
+      el.classList.remove('cta-primary[aria-disabled]');
+      if (badgeId) {
+        const b = document.getElementById(badgeId);
+        if (b) b.style.display = 'none';
+      }
+      // CTAセカンダリの「準備中」テキストを「→ 開く」に変更
+      const sm = el.querySelector('.cta-preparing-sm');
+      if (sm) { sm.textContent = '→ 開く'; sm.style.color = 'var(--green)'; }
+    }
+  });
+
+  // disabled リンクのクリックを無効化
+  document.querySelectorAll('[aria-disabled="true"]').forEach(el => {
+    el.addEventListener('click', e => e.preventDefault());
+  });
+})();
+
+/* ================================================
+   STAR BACKGROUND
+   ================================================ */
+(function createStars() {
+  const bg = document.getElementById('stars-bg');
+  if (!bg || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  for (let i = 0; i < 90; i++) {
+    const s = document.createElement('div');
+    const size = Math.random() < 0.65 ? 1 : 2;
+    const opacity = 0.08 + Math.random() * 0.35;
+    s.style.cssText = [
+      'position:absolute',
+      `width:${size}px`, `height:${size}px`,
+      'border-radius:50%',
+      'background:#ffffff',
+      `left:${(Math.random() * 100).toFixed(1)}%`,
+      `top:${(Math.random() * 100).toFixed(1)}%`,
+      `opacity:${opacity.toFixed(2)}`,
+      `animation:blink ${(1.5 + Math.random() * 3).toFixed(1)}s step-end infinite`,
+      `animation-delay:${(Math.random() * 4).toFixed(1)}s`,
+    ].join(';');
+    bg.appendChild(s);
+  }
+})();
+
+/* ================================================
+   SPRITE SETUP
+   ================================================ */
+const spr = {
+  stand: document.getElementById('kkimg-stand'),
+  wave:  document.getElementById('kkimg-wave'),
+  walk:  document.getElementById('kkimg-walk'),
+};
+
+const heroSprEl = document.getElementById('hero-sprite');
+if (spr.stand && spr.stand.src && !spr.stand.src.endsWith('__SPRITE_STAND__')) {
+  heroSprEl.src = spr.stand.src;
+}
+
+/* ================================================
+   GAME ENGINE
+   ================================================ */
+const canvas = document.getElementById('gameCanvas');
+const ctx    = canvas.getContext('2d');
+const W = 640, H = 400;
+canvas.width  = W;
+canvas.height = H;
+
+/* -- Game State -- */
+const G = {
+  started:  false,
+  over:     false,
+  allClear: false,
+  score:    0,
+  lives:    3,
+  frame:    0,
+  lastShot: 0,
+  SHOT_CD:  380,   // ms
+  playerMoving: false,
+};
+
+/* -- Player -- */
+const P = {
+  x: W / 2 - 24,
+  y: H - 64,
+  w: 48, h: 48,
+  spd: 5,
+};
+
+/* -- Service data -- */
+const SVCS = [
+  { task: '転記作業', label: '転記' },
+  { task: '集計作業', label: '集計' },
+  { task: '予約管理', label: '予約' },
+  { task: '在庫管理', label: '在庫' },
+  { task: 'SNS投稿',  label: 'SNS' },
+  { task: 'レポート', label: 'RPT' },
+  { task: '問い合わせ', label: 'QA' },
+  { task: 'PDF作成',  label: 'PDF' },
+];
+
+/* -- Enemies -- */
+function makeEnemies() {
+  const list = [];
+  const ROWS = 2, COLS = 4;
+  const EW = 74, EH = 36;
+  const GX = 18, GY = 22;
+  const sx = (W - COLS * (EW + GX) + GX) / 2;
+  const sy = 48;
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      list.push({
+        x: sx + c * (EW + GX),
+        y: sy + r * (EH + GY),
+        w: EW, h: EH,
+        alive:   true,
+        cleared: false,
+        id:      r * COLS + c,
+        svc:     SVCS[r * COLS + c],
+        flashT:  0,
+      });
+    }
+  }
+  return list;
+}
+let enemies  = makeEnemies();
+let enemyDx  = 0.65;
+
+/* -- Bullets -- */
+const bullets   = [];
+/* -- Particles -- */
+const particles = [];
+
+/* -- Input -- */
+const keys = {};
+let touchL = false, touchR = false, touchF = false;
+
+/* -- Keyboard -- */
+document.addEventListener('keydown', e => {
+  if (isPortfolioMode()) return;
+  keys[e.code] = true;
+  if (!G.started && (e.code === 'Space' || e.code === 'Enter')) startGame();
+  if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); shoot(); }
+  if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') e.preventDefault();
+});
+document.addEventListener('keyup', e => {
+  if (isPortfolioMode()) return;
+  keys[e.code] = false;
+});
+
+/* -- PRESS START button -- */
+document.getElementById('press-start-btn').addEventListener('click', function () {
+  startGame();
+  document.getElementById('game-stage').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+/* -- Mobile buttons -- */
+function setupTouch(id, onDown, onUp) {
+  const btn = document.getElementById(id);
+  if (!btn) return;
+  const down = e => { e.preventDefault(); onDown(); };
+  const up   = e => { e.preventDefault(); onUp();   };
+  btn.addEventListener('touchstart',  down, { passive: false });
+  btn.addEventListener('touchend',    up,   { passive: false });
+  btn.addEventListener('touchcancel', up,   { passive: false });
+  btn.addEventListener('mousedown', down);
+  btn.addEventListener('mouseup',   up);
+  btn.addEventListener('mouseleave', up);
+}
+setupTouch('btn-left',  () => { touchL = true;  if (!G.started) startGame(); }, () => touchL = false);
+setupTouch('btn-right', () => { touchR = true;  if (!G.started) startGame(); }, () => touchR = false);
+setupTouch('btn-fire',  () => { touchF = true;  if (!G.started) startGame(); shoot(); }, () => touchF = false);
+
+/* -- Show all services button -- */
+document.getElementById('show-all-btn').addEventListener('click', function () {
+  document.querySelectorAll('.service-card').forEach(el => el.classList.add('cleared'));
+  enemies.forEach(e => { e.alive = false; e.cleared = true; });
+  G.score = Math.max(G.score, 8000);
+  syncHUD();
+  // Scroll to services section
+  document.getElementById('services').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+/* ---- Game helpers ---- */
+function startGame() {
+  if (G.started) return;
+  G.started = true;
+  const btn = document.getElementById('press-start-btn');
+  if (btn) { btn.disabled = true; btn.style.opacity = '0.25'; btn.style.animation = 'none'; }
+}
+
+function shoot() {
+  if (!G.started || G.over || G.allClear) return;
+  const now = Date.now();
+  if (now - G.lastShot < G.SHOT_CD) return;
+  G.lastShot = now;
+  bullets.push({ x: P.x + P.w / 2 - 2, y: P.y, w: 4, h: 14, spd: 9 });
+}
+
+function explode(cx, cy) {
+  const COLORS = ['#FFE600','#FF9900','#FF3355','#00FF41','#00D4FF','#ffffff'];
+  for (let i = 0; i < 18; i++) {
+    const ang  = (Math.PI * 2 * i / 18) + (Math.random() - 0.5) * 0.4;
+    const spd  = 2.5 + Math.random() * 4;
+    particles.push({
+      x: cx, y: cy,
+      vx: Math.cos(ang) * spd,
+      vy: Math.sin(ang) * spd,
+      life: 1.0,
+      decay: 0.04 + Math.random() * 0.035,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      size:  2 + Math.random() * 3,
+    });
+  }
+}
+
+function revealCard(id) {
+  const el = document.getElementById('svc-' + id);
+  if (el && !el.classList.contains('cleared')) {
+    el.classList.add('cleared');
+  }
+  syncHUD();
+}
+
+function syncHUD() {
+  const cleared = enemies.filter(e => e.cleared).length;
+  const lifeSt  = '♥'.repeat(G.lives) + '♡'.repeat(Math.max(0, 3 - G.lives));
+  const scoreStr = String(G.score).padStart(5, '0');
+
+  document.getElementById('g-score').textContent   = scoreStr;
+  document.getElementById('g-life').textContent    = lifeSt;
+  document.getElementById('g-cleared').textContent = cleared + ' / 8';
+  document.getElementById('hero-score-val').textContent = scoreStr;
+  document.getElementById('hero-life-val').textContent  = lifeSt;
+}
+
+/* ---- Draw helpers ---- */
+function drawBg() {
+  ctx.fillStyle = '#000005';
+  ctx.fillRect(0, 0, W, H);
+
+  /* faint grid */
+  ctx.strokeStyle = 'rgba(0,255,65,0.025)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 48) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+  for (let y = 0; y < H; y += 48) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  /* ground line */
+  ctx.strokeStyle = 'rgba(0,255,65,0.5)';
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(0, H - 8); ctx.lineTo(W, H - 8); ctx.stroke();
+}
+
+function drawEnemy(e) {
+  if (!e.alive) return;
+  const fl = e.flashT > 0;
+  if (fl) e.flashT--;
+
+  const col = fl ? '#ffffff' : '#FF3355';
+
+  ctx.shadowColor = '#FF3355';
+  ctx.shadowBlur  = 8;
+  ctx.strokeStyle = col;
+  ctx.lineWidth   = 2;
+  ctx.strokeRect(e.x, e.y, e.w, e.h);
+  ctx.shadowBlur = 0;
+
+  ctx.fillStyle = fl ? 'rgba(255,255,255,0.18)' : 'rgba(255,51,85,0.08)';
+  ctx.fillRect(e.x + 2, e.y + 2, e.w - 4, e.h - 4);
+
+  /* Label */
+  ctx.font = "bold 12px 'DotGothic16', sans-serif";
+  ctx.fillStyle = fl ? '#fff' : '#FF3355';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(e.svc.task, e.x + e.w / 2, e.y + e.h / 2);
+
+  /* Corner pixels */
+  ctx.fillStyle = col;
+  [[e.x, e.y], [e.x+e.w-3, e.y], [e.x, e.y+e.h-3], [e.x+e.w-3, e.y+e.h-3]]
+    .forEach(([px, py]) => ctx.fillRect(px, py, 3, 3));
+}
+
+function drawPlayer() {
+  const img = (G.playerMoving && spr.walk && spr.walk.complete && spr.walk.naturalWidth > 0)
+    ? spr.walk
+    : (spr.stand && spr.stand.complete && spr.stand.naturalWidth > 0 ? spr.stand : null);
+
+  ctx.shadowColor = '#FFE600';
+  ctx.shadowBlur  = 12;
+
+  if (img) {
+    ctx.drawImage(img, P.x, P.y, P.w, P.h);
+  } else {
+    /* Pixel fallback */
+    ctx.fillStyle = '#FFE600';
+    ctx.fillRect(P.x + 10, P.y + 4, 28, 30);     /* body */
+    ctx.fillRect(P.x + 6,  P.y - 8, 36, 14);     /* head */
+    ctx.fillRect(P.x + 10, P.y + 34, 8, 12);     /* leg L */
+    ctx.fillRect(P.x + 30, P.y + 34, 8, 12);     /* leg R */
+    ctx.fillStyle = '#00D4FF';
+    ctx.fillRect(P.x + 22, P.y - 18, 4, 12);     /* cannon */
+  }
+  ctx.shadowBlur = 0;
+}
+
+function drawBullets() {
+  bullets.forEach(b => {
+    ctx.fillStyle = '#FFE600';
+    ctx.shadowColor = '#FFE600'; ctx.shadowBlur = 7;
+    ctx.fillRect(b.x, b.y, b.w, b.h);
+    ctx.shadowBlur = 0;
+  });
+}
+
+function drawParticles() {
+  particles.forEach(p => {
+    ctx.globalAlpha = Math.max(0, p.life);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+  });
+  ctx.globalAlpha = 1;
+}
+
+function drawHUD() {
+  ctx.fillStyle = 'rgba(0,0,0,0.55)';
+  ctx.fillRect(0, 0, W, 30);
+  ctx.font = "bold 9px 'Press Start 2P', monospace";
+  ctx.textBaseline = 'middle';
+
+  ctx.fillStyle = '#FFE600'; ctx.textAlign = 'left';
+  ctx.fillText('SCORE', 10, 15);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText(String(G.score).padStart(5, '0'), 72, 15);
+
+  ctx.fillStyle = '#FFE600'; ctx.textAlign = 'center';
+  ctx.fillText('STAGE 01', W / 2, 15);
+
+  ctx.fillStyle = '#FFE600'; ctx.textAlign = 'right';
+  ctx.fillText('LIFE', W - 78, 15);
+  ctx.fillStyle = '#FF3355';
+  ctx.fillText('♥'.repeat(G.lives), W - 10, 15);
+}
+
+function drawOverlay() {
+  /* Title screen */
+  if (!G.started && !G.over && !G.allClear) {
+    ctx.fillStyle = 'rgba(0,0,0,0.78)';
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.textAlign    = 'center';
+    ctx.textBaseline = 'middle';
+
+    ctx.font = "18px 'Press Start 2P', monospace";
+    ctx.fillStyle  = '#00FF41';
+    ctx.shadowColor = '#00FF41'; ctx.shadowBlur = 14;
+    ctx.fillText('KATAKATA', W / 2, H / 2 - 55);
+    ctx.fillText('INVADERS', W / 2, H / 2 - 25);
+    ctx.shadowBlur = 0;
+
+    ctx.font = "12px 'DotGothic16', sans-serif";
+    ctx.fillStyle = '#aaaaaa';
+    ctx.fillText('敵タスクを撃ち落として', W / 2, H / 2 + 12);
+    ctx.fillText('サービスを確認しよう', W / 2, H / 2 + 34);
+
+    if (Math.floor(Date.now() / 550) % 2 === 0) {
+      ctx.font = "11px 'Press Start 2P', monospace";
+      ctx.fillStyle  = '#FFE600';
+      ctx.shadowColor = '#FFE600'; ctx.shadowBlur = 8;
+      ctx.fillText('▶ PRESS START', W / 2, H / 2 + 82);
+      ctx.shadowBlur = 0;
+    }
+    return;
+  }
+
+  if (G.over) {
+    ctx.fillStyle = 'rgba(0,0,0,0.82)';
+    ctx.fillRect(0, 0, W, H);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+
+    ctx.font = "20px 'Press Start 2P', monospace";
+    ctx.fillStyle  = '#FF3355';
+    ctx.shadowColor = '#FF3355'; ctx.shadowBlur = 14;
+    ctx.fillText('GAME OVER', W / 2, H / 2 - 34);
+    ctx.shadowBlur = 0;
+
+    ctx.font = "11px 'DotGothic16', sans-serif";
+    ctx.fillStyle = '#888';
+    ctx.fillText('下にスクロールしてサービスを確認できます', W / 2, H / 2 + 8);
+    ctx.font = "9px 'Press Start 2P', monospace";
+    ctx.fillStyle = '#555';
+    ctx.fillText('SCORE: ' + G.score, W / 2, H / 2 + 42);
+    return;
+  }
+
+  if (G.allClear) {
+    ctx.fillStyle = 'rgba(0,0,0,0.82)';
+    ctx.fillRect(0, 0, W, H);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+
+    ctx.font = "20px 'Press Start 2P', monospace";
+    ctx.fillStyle  = '#00FF41';
+    ctx.shadowColor = '#00FF41'; ctx.shadowBlur = 18;
+    ctx.fillText('ALL CLEAR!', W / 2, H / 2 - 42);
+    ctx.shadowBlur = 0;
+
+    ctx.font = "13px 'DotGothic16', sans-serif";
+    ctx.fillStyle = '#FFE600';
+    ctx.fillText('手作業を全部撃ち落とした！', W / 2, H / 2 + 2);
+    ctx.font = "11px 'DotGothic16', sans-serif";
+    ctx.fillStyle = '#888';
+    ctx.fillText('下のサービスカードを確認してください ▼', W / 2, H / 2 + 28);
+    ctx.font = "10px 'Press Start 2P', monospace";
+    ctx.fillStyle = '#FFE600';
+    ctx.fillText('SCORE: ' + G.score, W / 2, H / 2 + 62);
+    return;
+  }
+}
+
+/* ---- Main loop ---- */
+let lastT = 0;
+function loop(ts) {
+  if (isPortfolioMode()) return;
+  const dt = ts - lastT;
+  lastT = ts;
+  G.frame++;
+
+  /* === UPDATE === */
+  if (G.started && !G.over && !G.allClear) {
+
+    const mL = keys['ArrowLeft']  || keys['KeyA'] || touchL;
+    const mR = keys['ArrowRight'] || keys['KeyD'] || touchR;
+    G.playerMoving = mL || mR;
+
+    if (mL) P.x = Math.max(0, P.x - P.spd);
+    if (mR) P.x = Math.min(W - P.w, P.x + P.spd);
+
+    if (touchF) shoot();
+
+    /* Bullets */
+    for (let i = bullets.length - 1; i >= 0; i--) {
+      bullets[i].y -= bullets[i].spd;
+      if (bullets[i].y + bullets[i].h < 0) bullets.splice(i, 1);
+    }
+
+    /* Enemies */
+    const alive = enemies.filter(e => e.alive);
+    if (alive.length === 0) {
+      G.allClear = true;
+    } else {
+      let wall = false;
+      alive.forEach(e => {
+        e.x += enemyDx;
+        if (e.x + e.w >= W - 2 || e.x <= 2) wall = true;
+      });
+      if (wall) {
+        enemyDx *= -1.04;
+        alive.forEach(e => { e.y += 10; });
+      }
+
+      /* Enemies reach player zone → lose life */
+      alive.forEach(e => {
+        if (e.y + e.h >= H - 70) {
+          G.lives--;
+          syncHUD();
+          if (G.lives <= 0) {
+            G.over = true;
+          } else {
+            enemies  = makeEnemies();
+            enemyDx  = 0.65;
+          }
+        }
+      });
+    }
+
+    /* Collision */
+    outer:
+    for (let bi = bullets.length - 1; bi >= 0; bi--) {
+      const b = bullets[bi];
+      for (let ei = 0; ei < enemies.length; ei++) {
+        const e = enemies[ei];
+        if (!e.alive) continue;
+        if (b.x < e.x + e.w && b.x + b.w > e.x &&
+            b.y < e.y + e.h && b.y + b.h > e.y) {
+          e.alive   = false;
+          e.cleared = true;
+          e.flashT  = 12;
+          bullets.splice(bi, 1);
+          G.score += 1000;
+          syncHUD();
+          explode(e.x + e.w / 2, e.y + e.h / 2);
+          revealCard(e.id);
+          break outer;
+        }
+      }
+    }
+
+    /* Particles */
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx; p.y += p.vy;
+      p.vy += 0.18;
+      p.life -= p.decay;
+      if (p.life <= 0) particles.splice(i, 1);
+    }
+  }
+
+  /* === DRAW === */
+  drawBg();
+
+  if (G.started && !G.over && !G.allClear) {
+    enemies.forEach(drawEnemy);
+    drawBullets();
+    drawPlayer();
+    drawParticles();
+    drawHUD();
+  }
+
+  drawOverlay();
+  requestAnimationFrame(loop);
+}
+
+requestAnimationFrame(loop);
+
+/* ================================================
+   SCROLL REVEAL (IntersectionObserver)
+   ================================================ */
+if ('IntersectionObserver' in window &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+}
+
+/* ================================================
+   FORNUS PORTFOLIO APP
+   既存LPを残しつつ、ページ切り替え型の入口を追加する。
+   ================================================ */
+(function initPortfolioApp() {
+  const pages = ['home', 'menu', 'about', 'services', 'works', 'pricing', 'chatbot', 'contact'];
+  const nav = document.getElementById('top-nav');
+  const heroSprite = document.getElementById('portfolio-hero-sprite');
+  const botIcon = document.getElementById('bot-icon');
+  const spriteSrc = spr.stand && spr.stand.src && !spr.stand.src.endsWith('__SPRITE_STAND__') ? spr.stand.src : '';
+  const fallbackSprite = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" shape-rendering="crispEdges">
+      <rect width="96" height="96" fill="none"/>
+      <rect x="22" y="14" width="52" height="8" fill="#fff4df"/><rect x="14" y="22" width="68" height="48" fill="#fff4df"/>
+      <rect x="22" y="70" width="52" height="8" fill="#fff4df"/><rect x="32" y="78" width="12" height="8" fill="#fff4df"/><rect x="58" y="78" width="12" height="8" fill="#fff4df"/>
+      <rect x="28" y="34" width="12" height="4" fill="#000"/><rect x="58" y="34" width="12" height="4" fill="#000"/>
+      <rect x="47" y="42" width="4" height="8" fill="#000"/><rect x="42" y="50" width="4" height="4" fill="#000"/><rect x="52" y="50" width="4" height="4" fill="#000"/>
+      <rect x="28" y="56" width="40" height="22" fill="#ffd600"/><rect x="26" y="54" width="44" height="4" fill="#000"/><rect x="26" y="78" width="44" height="4" fill="#000"/>
+      <rect x="28" y="58" width="4" height="18" fill="#000"/><rect x="68" y="58" width="4" height="20" fill="#000"/>
+      <rect x="35" y="64" width="22" height="4" fill="#000"/><rect x="47" y="68" width="4" height="4" fill="#000"/>
+      <rect x="12" y="54" width="8" height="20" fill="#000"/><rect x="8" y="60" width="8" height="12" fill="#fff4df"/>
+      <rect x="76" y="54" width="8" height="20" fill="#000"/><rect x="84" y="60" width="8" height="12" fill="#fff4df"/>
+      <rect x="28" y="86" width="20" height="8" fill="#000"/><rect x="56" y="86" width="20" height="8" fill="#000"/>
+    </svg>`);
+  const usableSprite = spriteSrc || fallbackSprite;
+  const portfolioSprite = new Image();
+  portfolioSprite.src = usableSprite;
+  if (heroSprite) heroSprite.src = usableSprite;
+  if (botIcon) botIcon.src = usableSprite;
+
+  function routeFromHash() {
+    const route = location.hash.replace('#/', '').trim();
+    return pages.includes(route) ? route : 'home';
+  }
+
+  function setRoute(page) {
+    const safePage = pages.includes(page) ? page : 'home';
+    document.querySelectorAll('.app-screen[data-page]').forEach(screen => {
+      screen.classList.toggle('active', screen.getAttribute('data-page') === safePage);
+    });
+    if (nav) nav.classList.toggle('active', safePage !== 'home');
+    document.querySelectorAll('.nav-btn[data-route]').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-route') === safePage);
+    });
+    window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+    if (safePage === 'menu') menuGame.resetStatus();
+  }
+
+  function go(page) {
+    location.hash = '#/' + page;
+    setRoute(page);
+  }
+
+  document.addEventListener('click', event => {
+    const routeEl = event.target.closest('[data-route]');
+    if (!routeEl) return;
+    event.preventDefault();
+    go(routeEl.getAttribute('data-route'));
+  });
+  window.addEventListener('hashchange', () => setRoute(routeFromHash()));
+
+  const startBtn = document.getElementById('portfolio-start-btn');
+  const bootPanel = document.getElementById('boot-panel');
+  const bootLine = document.getElementById('boot-line');
+  const heroPlayer = document.getElementById('portfolio-hero-player');
+  let booting = false;
+
+  if (startBtn) {
+    startBtn.addEventListener('click', () => {
+      if (booting) return;
+      booting = true;
+      startBtn.disabled = true;
+      if (heroPlayer) heroPlayer.classList.add('is-pressing');
+      if (bootPanel) bootPanel.classList.add('active');
+      if (bootLine) bootLine.textContent = 'BOOTING FORNUS PORTFOLIO...';
+      setTimeout(() => document.body.classList.add('boot-flash'), 360);
+      setTimeout(() => {
+        if (bootLine) bootLine.textContent = 'READY';
+      }, 760);
+      setTimeout(() => {
+        document.body.classList.remove('boot-flash');
+        if (heroPlayer) heroPlayer.classList.remove('is-pressing');
+        go('menu');
+        startBtn.disabled = false;
+        booting = false;
+      }, 1120);
+    });
+  }
+
+  function applyPortfolioLinks() {
+    document.querySelectorAll('.js-cta[data-link-key]').forEach(el => {
+      const key = el.getAttribute('data-link-key');
+      const url = LINKS[key];
+      const active = Boolean(url && url !== '#');
+      if (active) {
+        el.setAttribute('href', url);
+        el.setAttribute('target', '_blank');
+        el.setAttribute('rel', 'noopener noreferrer');
+        el.removeAttribute('aria-disabled');
+      } else {
+        el.removeAttribute('href');
+        el.setAttribute('aria-disabled', 'true');
+      }
+    });
+  }
+  applyPortfolioLinks();
+  document.addEventListener('click', event => {
+    const disabled = event.target.closest('.js-cta[aria-disabled="true"]');
+    if (disabled) event.preventDefault();
+  });
+
+  const services = [
+    ['GAS / スプレッドシート自動化', '転記、集計、通知、PDF作成', 'Googleフォームやスプレッドシートで管理している人', '今使っているシート、手作業の流れ、毎月の作業回数'],
+    ['AI業務改善', '文章作成、分類、要約、問い合わせ下書き', '同じ文章や判断を何度もしている人', 'よく使う文章、判断ルール、困っている場面'],
+    ['Webアプリ / 管理画面', '予約、在庫、顧客、実績の確認作業', 'Excelや紙では限界が出てきた人', '管理したい項目、利用人数、スマホ利用の有無'],
+    ['LP / ホームページ制作', '説明不足による営業の手戻り', 'サービス内容を分かりやすく見せたい人', '掲載したい内容、写真、問い合わせ先'],
+    ['LINE / メール自動返信', 'よくある質問への返信、受付案内', '問い合わせ対応に追われている人', 'よく来る質問、返信例、案内したいURL'],
+    ['PDF / 帳票自動生成', '見積書、請求書、報告書の作成', '同じ形式の書類を毎月作る人', '帳票テンプレート、入力元データ、出力例'],
+    ['SNS投稿文生成・管理', '投稿文作成、台本作り、素材整理', '発信を続けたいが手が回らない人', '発信テーマ、商品情報、過去投稿'],
+  ];
+
+  const serviceList = document.getElementById('service-list');
+  if (serviceList) {
+    serviceList.innerHTML = services.map(item => `
+      <article class="info-card">
+        <h3>${item[0]}</h3>
+        <p><strong>減らせる作業：</strong>${item[1]}</p>
+        <p><strong>向いている人：</strong>${item[2]}</p>
+        <p><strong>用意するもの：</strong>${item[3]}</p>
+      </article>
+    `).join('');
+  }
+
+  const works = [
+    ['KATAKATA INVADERS', 'ポートフォリオの印象が弱い', 'ゲーム型ポートフォリオLP', '初見で制作領域を伝えやすくした', 'Canvas / 8bit / UI演出'],
+    ['Salon Easy', '在庫・材料費・店販・実績が分散', 'ネイルサロン向け管理システム', '日々の入力と確認を一画面に集約', 'Webアプリ / 管理画面'],
+    ['LINE自動返信システム', '営業時間外の問い合わせ対応', 'LINE公式アカウント向けAI自動返信', '返信待ちを減らし一次対応を自動化', 'LINE / AI応答設計'],
+    ['出張旅費・報告書自動化', '申請、集計、報告書作成が手作業', 'フォームからPDFまでの自動処理', '転記ミスと作成時間を削減', 'Googleフォーム / GAS / PDF'],
+    ['SNS投稿・ショート動画自動化', '投稿案と台本作成が続かない', '投稿素材・台本・管理の自動化', '発信準備をまとめて進めやすくした', 'AI / スプレッドシート / 管理設計'],
+  ];
+
+  const worksList = document.getElementById('works-list');
+  if (worksList) {
+    worksList.innerHTML = works.map(item => `
+      <article class="info-card">
+        <h3>${item[0]}</h3>
+        <p><strong>課題：</strong>${item[1]}</p>
+        <p><strong>作ったもの：</strong>${item[2]}</p>
+        <p><strong>効果：</strong>${item[3]}</p>
+        <p><strong>使用技術：</strong>${item[4]}</p>
+      </article>
+    `).join('');
+  }
+
+  const menuGame = (function createMenuGame() {
+    const c = document.getElementById('menuCanvas');
+    const menuCtx = c ? c.getContext('2d') : null;
+    const W2 = 640;
+    const H2 = 420;
+    const items = [
+      { key: 'about', label: 'ABOUT', sub: 'Fornusについて', x: 34, y: 58, w: 170, h: 60 },
+      { key: 'services', label: 'SERVICES', sub: 'できること', x: 235, y: 58, w: 170, h: 60 },
+      { key: 'works', label: 'WORKS', sub: '制作実績', x: 436, y: 58, w: 170, h: 60 },
+      { key: 'pricing', label: 'PRICING', sub: '料金目安', x: 34, y: 154, w: 170, h: 60 },
+      { key: 'chatbot', label: 'CHATBOT', sub: '簡易見積もり', x: 235, y: 154, w: 170, h: 60 },
+      { key: 'contact', label: 'CONTACT', sub: '相談する', x: 436, y: 154, w: 170, h: 60 },
+    ];
+    const state = { x: 296, y: 338, w: 48, h: 48, left: false, right: false, shotAt: 0, bullets: [], particles: [], selected: null, navigateAt: 0 };
+
+    function resetStatus() {
+      state.selected = null;
+      state.navigateAt = 0;
+      const status = document.getElementById('menu-status');
+      if (status) status.textContent = 'READY';
+    }
+
+    function fire() {
+      if (!c || routeFromHash() !== 'menu') return;
+      const now = Date.now();
+      if (now - state.shotAt < 360 || state.selected) return;
+      state.shotAt = now;
+      state.bullets.push({ x: state.x + state.w / 2 - 2, y: state.y, w: 4, h: 16 });
+    }
+
+    function addParticles(x, y) {
+      for (let i = 0; i < 18; i++) {
+        state.particles.push({
+          x, y,
+          vx: Math.cos(i / 18 * Math.PI * 2) * (2 + Math.random() * 3),
+          vy: Math.sin(i / 18 * Math.PI * 2) * (2 + Math.random() * 3),
+          life: 1,
+          color: ['#FFE600', '#00FF41', '#00D4FF', '#FF3355'][i % 4],
+        });
+      }
+    }
+
+    function choose(item) {
+      if (!item || state.selected) return;
+      state.selected = item.key;
+      state.navigateAt = Date.now() + 520;
+      const status = document.getElementById('menu-status');
+      const target = document.getElementById('menu-target');
+      if (status) status.textContent = 'SELECTED';
+      if (target) target.textContent = item.label;
+      addParticles(item.x + item.w / 2, item.y + item.h / 2);
+    }
+
+    function draw() {
+      if (!menuCtx) return;
+      menuCtx.fillStyle = '#000005';
+      menuCtx.fillRect(0, 0, W2, H2);
+      menuCtx.strokeStyle = 'rgba(0,255,65,0.07)';
+      for (let x = 0; x < W2; x += 40) { menuCtx.beginPath(); menuCtx.moveTo(x, 0); menuCtx.lineTo(x, H2); menuCtx.stroke(); }
+      for (let y = 0; y < H2; y += 40) { menuCtx.beginPath(); menuCtx.moveTo(0, y); menuCtx.lineTo(W2, y); menuCtx.stroke(); }
+      menuCtx.font = "10px 'Press Start 2P', monospace";
+      menuCtx.textAlign = 'center';
+      items.forEach(item => {
+        const hit = state.selected === item.key;
+        menuCtx.strokeStyle = hit ? '#00FF41' : '#FF3355';
+        menuCtx.fillStyle = hit ? 'rgba(0,255,65,0.12)' : 'rgba(255,51,85,0.08)';
+        menuCtx.lineWidth = 2;
+        menuCtx.fillRect(item.x, item.y, item.w, item.h);
+        menuCtx.strokeRect(item.x, item.y, item.w, item.h);
+        menuCtx.fillStyle = hit ? '#00FF41' : '#FFE600';
+        menuCtx.fillText(hit ? 'CLEAR' : item.label, item.x + item.w / 2, item.y + 25);
+        menuCtx.font = "12px 'DotGothic16', sans-serif";
+        menuCtx.fillStyle = '#aaaaaa';
+        menuCtx.fillText(item.sub, item.x + item.w / 2, item.y + 46);
+        menuCtx.font = "10px 'Press Start 2P', monospace";
+      });
+
+      state.bullets.forEach(b => {
+        menuCtx.fillStyle = '#FFE600';
+        menuCtx.shadowColor = '#FFE600';
+        menuCtx.shadowBlur = 8;
+        menuCtx.fillRect(b.x, b.y, b.w, b.h);
+        menuCtx.shadowBlur = 0;
+      });
+
+      const img = spr.stand && spr.stand.complete && spr.stand.naturalWidth > 0 ? spr.stand : portfolioSprite;
+      menuCtx.shadowColor = '#FFE600';
+      menuCtx.shadowBlur = 12;
+      if (img) {
+        menuCtx.drawImage(img, state.x, state.y, state.w, state.h);
+      } else {
+        menuCtx.fillStyle = '#fff3d8';
+        menuCtx.fillRect(state.x + 8, state.y, 32, 34);
+        menuCtx.fillStyle = '#FFE600';
+        menuCtx.fillRect(state.x + 11, state.y + 18, 26, 16);
+        menuCtx.fillStyle = '#000';
+        menuCtx.fillRect(state.x + 14, state.y + 7, 6, 3);
+        menuCtx.fillRect(state.x + 28, state.y + 7, 6, 3);
+      }
+      menuCtx.shadowBlur = 0;
+
+      state.particles.forEach(p => {
+        menuCtx.globalAlpha = Math.max(0, p.life);
+        menuCtx.fillStyle = p.color;
+        menuCtx.fillRect(p.x, p.y, 4, 4);
+      });
+      menuCtx.globalAlpha = 1;
+    }
+
+    function tick() {
+      if (routeFromHash() === 'menu') {
+        if (state.left) state.x = Math.max(0, state.x - 5);
+        if (state.right) state.x = Math.min(W2 - state.w, state.x + 5);
+        for (let i = state.bullets.length - 1; i >= 0; i--) {
+          const b = state.bullets[i];
+          b.y -= 9;
+          if (b.y < -20) state.bullets.splice(i, 1);
+          for (const item of items) {
+            if (!state.selected && b.x < item.x + item.w && b.x + b.w > item.x && b.y < item.y + item.h && b.y + b.h > item.y) {
+              state.bullets.splice(i, 1);
+              choose(item);
+              break;
+            }
+          }
+        }
+        for (let i = state.particles.length - 1; i >= 0; i--) {
+          const p = state.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.16;
+          p.life -= 0.055;
+          if (p.life <= 0) state.particles.splice(i, 1);
+        }
+        if (state.selected && Date.now() > state.navigateAt) go(state.selected);
+      }
+      draw();
+      requestAnimationFrame(tick);
+    }
+
+    if (c) {
+      c.addEventListener('click', event => {
+        const rect = c.getBoundingClientRect();
+        const px = (event.clientX - rect.left) * (W2 / rect.width);
+        const py = (event.clientY - rect.top) * (H2 / rect.height);
+        choose(items.find(item => px >= item.x && px <= item.x + item.w && py >= item.y && py <= item.y + item.h));
+      });
+    }
+
+    function holdButton(id, prop) {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      const down = event => { event.preventDefault(); state[prop] = true; };
+      const up = event => { event.preventDefault(); state[prop] = false; };
+      btn.addEventListener('touchstart', down, { passive: false });
+      btn.addEventListener('touchend', up, { passive: false });
+      btn.addEventListener('touchcancel', up, { passive: false });
+      btn.addEventListener('mousedown', down);
+      btn.addEventListener('mouseup', up);
+      btn.addEventListener('mouseleave', up);
+    }
+    holdButton('menu-btn-left', 'left');
+    holdButton('menu-btn-right', 'right');
+    const fireBtn = document.getElementById('menu-btn-fire');
+    if (fireBtn) {
+      fireBtn.addEventListener('click', event => { event.preventDefault(); fire(); });
+      fireBtn.addEventListener('touchstart', event => { event.preventDefault(); fire(); }, { passive: false });
+    }
+
+    document.addEventListener('keydown', event => {
+      if (routeFromHash() !== 'menu') return;
+      if (event.code === 'ArrowLeft' || event.code === 'KeyA') { state.left = true; event.preventDefault(); }
+      if (event.code === 'ArrowRight' || event.code === 'KeyD') { state.right = true; event.preventDefault(); }
+      if (event.code === 'Space' || event.code === 'Enter') { fire(); event.preventDefault(); }
+    });
+    document.addEventListener('keyup', event => {
+      if (event.code === 'ArrowLeft' || event.code === 'KeyA') state.left = false;
+      if (event.code === 'ArrowRight' || event.code === 'KeyD') state.right = false;
+    });
+
+    requestAnimationFrame(tick);
+    return { resetStatus };
+  })();
+
+  const questions = [
+    { key: 'task', text: 'Q1. 何を減らしたいですか？', choices: ['転記', '集計', '予約管理', '在庫管理', '問い合わせ対応', 'PDF/帳票作成', 'SNS投稿', 'よく分からない'] },
+    { key: 'tool', text: 'Q2. 今は何で管理していますか？', choices: ['Excel', 'Googleスプレッドシート', '紙', 'LINE', 'メール', '既存システム', 'まだ決まっていない'] },
+    { key: 'speed', text: 'Q3. どれくらい急ぎですか？', choices: ['今週中', '1ヶ月以内', 'まず相談したい'] },
+    { key: 'budget', text: 'Q4. 予算感は？', choices: ['〜1万円', '1〜3万円', '3〜8万円', '8万円以上', 'まだ未定'] },
+  ];
+  const chatState = { step: 0, answers: {} };
+
+  function renderChat() {
+    const msg = document.getElementById('bot-message');
+    const choices = document.getElementById('chat-choices');
+    if (!msg || !choices) return;
+    if (chatState.step >= questions.length) {
+      showDiagnosis();
+      return;
+    }
+    const q = questions[chatState.step];
+    msg.textContent = q.text;
+    choices.innerHTML = q.choices.map(choice => `<button class="choice-btn" type="button" data-choice="${choice}">${choice}</button>`).join('');
+  }
+
+  function diagnose() {
+    const a = chatState.answers;
+    const task = a.task || '';
+    const tool = a.tool || '';
+    if (['転記', '集計', 'PDF/帳票作成'].includes(task) || ['Googleスプレッドシート', 'Excel'].includes(tool)) {
+      return ['◎ 対応しやすい', 'GAS / スプレッドシート自動化', '15,000円〜30,000円目安', '今使っているシート、手作業の流れ、毎月の件数'];
+    }
+    if (['予約管理', '在庫管理'].includes(task) || tool === '既存システム') {
+      return ['○ 内容確認で対応可能', 'Webアプリ / 管理画面', '50,000円〜80,000円目安', '管理したい項目、利用人数、スマホで使う場面'];
+    }
+    if (task === '問い合わせ対応' || ['LINE', 'メール'].includes(tool)) {
+      return ['○ 内容確認で対応可能', 'LINE / メール自動返信', '30,000円〜目安', 'よくある質問、返信例、受付したい内容'];
+    }
+    if (task === 'SNS投稿') {
+      return ['○ 内容確認で対応可能', 'SNS投稿文生成・管理', '15,000円〜50,000円目安', '発信テーマ、商品情報、過去投稿'];
+    }
+    return ['△ 要件整理が必要', 'スポット相談', '無料相談から', '困っている作業、使っている道具、理想の状態'];
+  }
+
+  function showDiagnosis() {
+    const [level, menu, price, nextInfo] = diagnose();
+    const a = chatState.answers;
+    const note = document.getElementById('free-note');
+    const memo = note && note.value ? ` 補足：${note.value}` : '';
+    const text = `現在、${a.tool}で${a.task}を手作業しています。${a.task}を自動化できるか相談したいです。予算は${a.budget}、${a.speed}を希望しています。${memo}`;
+    const result = document.getElementById('diagnosis-result');
+    const consult = document.getElementById('consult-text');
+    const msg = document.getElementById('bot-message');
+    const choices = document.getElementById('chat-choices');
+    if (msg) msg.textContent = '診断結果です。相談文も自動生成しました。';
+    if (choices) choices.innerHTML = '';
+    if (result) {
+      result.hidden = false;
+      result.innerHTML = `
+        <h3>RESULT</h3>
+        <p><strong>対応可能度：</strong>${level}</p>
+        <p><strong>おすすめメニュー：</strong>${menu}</p>
+        <p><strong>目安料金：</strong>${price}</p>
+        <p><strong>次に送ると良い情報：</strong>${nextInfo}</p>
+      `;
+    }
+    if (consult) consult.value = text;
+  }
+
+  const choiceBox = document.getElementById('chat-choices');
+  if (choiceBox) {
+    choiceBox.addEventListener('click', event => {
+      const btn = event.target.closest('[data-choice]');
+      if (!btn) return;
+      const q = questions[chatState.step];
+      chatState.answers[q.key] = btn.getAttribute('data-choice');
+      chatState.step++;
+      renderChat();
+    });
+  }
+  const resetChat = document.getElementById('reset-chat');
+  if (resetChat) {
+    resetChat.addEventListener('click', () => {
+      chatState.step = 0;
+      chatState.answers = {};
+      const result = document.getElementById('diagnosis-result');
+      const consult = document.getElementById('consult-text');
+      const status = document.getElementById('copy-status');
+      if (result) result.hidden = true;
+      if (consult) consult.value = '';
+      if (status) status.textContent = '';
+      renderChat();
+    });
+  }
+  const copyBtn = document.getElementById('copy-consult');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', async () => {
+      const consult = document.getElementById('consult-text');
+      const status = document.getElementById('copy-status');
+      if (!consult || !consult.value) {
+        if (status) status.textContent = '先に診断してください。';
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(consult.value);
+        if (status) status.textContent = 'コピーしました。';
+      } catch (error) {
+        consult.select();
+        document.execCommand('copy');
+        if (status) status.textContent = 'コピーしました。';
+      }
+    });
+  }
+  renderChat();
+  setRoute(routeFromHash());
+})();
+
+</script>
+</body>
+</html>
