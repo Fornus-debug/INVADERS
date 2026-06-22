@@ -3438,12 +3438,12 @@ if ('IntersectionObserver' in window &&
     const W2 = 640;
     const H2 = 420;
     const items = [
-      { key: 'about', label: 'ABOUT', sub: 'Fornusについて', x: 34, y: 58, w: 170, h: 60 },
-      { key: 'services', label: 'SERVICES', sub: 'できること', x: 235, y: 58, w: 170, h: 60 },
-      { key: 'works', label: 'WORKS', sub: '制作実績', x: 436, y: 58, w: 170, h: 60 },
-      { key: 'pricing', label: 'PRICING', sub: '料金目安', x: 34, y: 154, w: 170, h: 60 },
-      { key: 'chatbot', label: 'CHATBOT', sub: '簡易見積もり', x: 235, y: 154, w: 170, h: 60 },
-      { key: 'contact', label: 'CONTACT', sub: '相談する', x: 436, y: 154, w: 170, h: 60 },
+      { key: 'about', label: 'ABOUT', sub: 'Fornusについて', x: 24, y: 70, w: 96, h: 58 },
+      { key: 'services', label: 'SERVICES', sub: 'できること', x: 124, y: 158, w: 96, h: 58 },
+      { key: 'works', label: 'WORKS', sub: '制作実績', x: 224, y: 70, w: 96, h: 58 },
+      { key: 'pricing', label: 'PRICING', sub: '料金目安', x: 324, y: 158, w: 96, h: 58 },
+      { key: 'chatbot', label: 'CHATBOT', sub: '簡易見積もり', x: 424, y: 70, w: 96, h: 58 },
+      { key: 'contact', label: 'CONTACT', sub: '相談する', x: 524, y: 158, w: 96, h: 58 },
     ];
     const state = { x: 296, y: 338, w: 48, h: 48, left: false, right: false, shotAt: 0, bullets: [], particles: [], selected: null, navigateAt: 0 };
 
@@ -3492,7 +3492,7 @@ if ('IntersectionObserver' in window &&
       menuCtx.strokeStyle = 'rgba(0,255,65,0.07)';
       for (let x = 0; x < W2; x += 40) { menuCtx.beginPath(); menuCtx.moveTo(x, 0); menuCtx.lineTo(x, H2); menuCtx.stroke(); }
       for (let y = 0; y < H2; y += 40) { menuCtx.beginPath(); menuCtx.moveTo(0, y); menuCtx.lineTo(W2, y); menuCtx.stroke(); }
-      menuCtx.font = "10px 'Press Start 2P', monospace";
+      menuCtx.font = "9px 'Press Start 2P', monospace";
       menuCtx.textAlign = 'center';
       items.forEach(item => {
         const hit = state.selected === item.key;
@@ -3503,10 +3503,10 @@ if ('IntersectionObserver' in window &&
         menuCtx.strokeRect(item.x, item.y, item.w, item.h);
         menuCtx.fillStyle = hit ? '#00FF41' : '#FFE600';
         menuCtx.fillText(hit ? 'CLEAR' : item.label, item.x + item.w / 2, item.y + 25);
-        menuCtx.font = "12px 'DotGothic16', sans-serif";
+        menuCtx.font = "11px 'DotGothic16', sans-serif";
         menuCtx.fillStyle = '#aaaaaa';
         menuCtx.fillText(item.sub, item.x + item.w / 2, item.y + 46);
-        menuCtx.font = "10px 'Press Start 2P', monospace";
+        menuCtx.font = "9px 'Press Start 2P', monospace";
       });
 
       state.bullets.forEach(b => {
