@@ -1429,6 +1429,81 @@ body.portfolio-mode > .pixel-hr {
   color: var(--green);
 }
 
+.profile-page {
+  max-width: 980px;
+}
+
+.profile-subtitle,
+.profile-section-title {
+  font-family: 'DotGothic16', sans-serif;
+  color: var(--yellow);
+  font-size: clamp(20px, 4vw, 28px);
+  line-height: 1.4;
+  margin: -4px 0 18px;
+}
+
+.profile-summary {
+  max-width: 780px;
+  margin-bottom: 28px;
+}
+
+.profile-summary p,
+.profile-body p {
+  font-family: 'DotGothic16', sans-serif;
+  font-size: var(--fs-body-lg);
+  line-height: 1.85;
+  color: var(--text);
+}
+
+.profile-summary p + p,
+.profile-body p + p {
+  margin-top: 16px;
+}
+
+.profile-body {
+  max-width: 780px;
+  margin-bottom: 30px;
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin: 28px 0 34px;
+}
+
+.profile-stat {
+  border: 2px solid var(--border);
+  background: var(--card-bg);
+  padding: 14px;
+}
+
+.profile-stat span {
+  display: block;
+  color: var(--gray);
+  font-size: var(--fs-small);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.profile-stat strong {
+  display: block;
+  color: var(--green);
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(12px, 2.4vw, 16px);
+  line-height: 1.5;
+}
+
+.profile-values {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.profile-cta {
+  margin-top: 28px;
+}
+
 .pricing-list {
   display: grid;
   gap: 10px;
@@ -1827,8 +1902,27 @@ body.portfolio-mode {
     gap: 10px;
   }
 
-  [data-page="about"] .content-grid,
+  [data-page="profile"] .content-grid,
   [data-page="works"] .content-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .profile-page {
+    max-width: 1040px;
+  }
+
+  .profile-summary,
+  .profile-body {
+    max-width: 780px;
+  }
+
+  .profile-summary p,
+  .profile-body p {
+    font-size: 16px;
+    line-height: 1.85;
+  }
+
+  .profile-values {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
@@ -1935,6 +2029,10 @@ body.portfolio-mode {
   .mob-btn { min-width: 0; flex: 1; padding: 16px 8px; font-size: 9px; }
   .price-row { grid-template-columns: 1fr; }
   .price-row span { white-space: normal; }
+  .profile-values { grid-template-columns: 1fr; }
+  .profile-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .profile-summary,
+  .profile-body { max-width: 100%; }
 }
 
 @media (max-width: 480px) {
@@ -1945,6 +2043,14 @@ body.portfolio-mode {
   .nav-btn { font-size: 10px; }
   .nav-btn { padding: 10px 11px; }
   .page-lead { font-size: 15px; }
+  .profile-summary p,
+  .profile-body p {
+    font-size: 15px;
+    line-height: 1.82;
+  }
+  .profile-stat strong {
+    font-size: 12px;
+  }
   .info-card p,
   .info-card li,
   .bot-text,
@@ -1976,7 +2082,7 @@ body.portfolio-mode {
   <div class="top-nav-inner">
     <span class="top-nav-title">FORNUS PORTFOLIO</span>
     <button class="nav-btn" type="button" data-route="menu" aria-label="ゲームメニューへ戻る">[MENU]</button>
-    <button class="nav-btn" type="button" data-route="about" aria-label="ABOUTページへ">[ABOUT]</button>
+    <button class="nav-btn" type="button" data-route="profile" aria-label="PROFILEページへ">[PROFILE]</button>
     <button class="nav-btn" type="button" data-route="services" aria-label="SERVICESページへ">[SERVICES]</button>
     <button class="nav-btn" type="button" data-route="works" aria-label="WORKSページへ">[WORKS]</button>
     <button class="nav-btn" type="button" data-route="pricing" aria-label="PRICINGページへ">[PRICING]</button>
@@ -2052,7 +2158,7 @@ body.portfolio-mode {
       <p class="game-pc-hint">PC操作：ArrowLeft / ArrowRight / A / D で移動、Space / Enter で発射</p>
 
       <div class="menu-access-list" aria-label="タップでも開けるメニュー">
-        <button type="button" data-route="about">ABOUT</button>
+        <button type="button" data-route="profile">PROFILE</button>
         <button type="button" data-route="services">SERVICES</button>
         <button type="button" data-route="works">WORKS</button>
         <button type="button" data-route="pricing">PRICING</button>
@@ -2062,17 +2168,50 @@ body.portfolio-mode {
     </div>
   </section>
 
-  <section class="app-screen" data-page="about" aria-label="ABOUT FORNUS">
-    <div class="page-inner">
-      <h2 class="page-title">ABOUT FORNUS</h2>
-      <p class="page-lead">Fornusは、AI・GAS・Webアプリを使って、個人事業主・小規模事業者の手作業を減らす制作ポートフォリオです。</p>
-      <div class="content-grid">
-        <article class="info-card"><h3>現場を知る制作</h3><ul><li>製造業12年</li><li>最大14名規模のライン管理</li><li>現場改善・品質改善・人材育成</li></ul></article>
-        <article class="info-card"><h3>小さく作る</h3><ul><li>生成AIを使った業務改善へ展開</li><li>難しいIT用語を使わず、現場の言葉で整理</li><li>小さく作って、実務で使える形にする</li></ul></article>
+  <section class="app-screen" data-page="profile" aria-label="PROFILE 作っている人">
+    <div class="page-inner profile-page">
+      <h2 class="page-title">PROFILE</h2>
+      <p class="profile-subtitle">作っている人</p>
+
+      <div class="profile-summary retro-panel">
+        <p>Fornusは、AI・GAS・Webアプリを使って、個人事業主・小規模事業者の手作業を減らす制作ポートフォリオです。</p>
+        <p>製造業12年の現場経験をもとに、難しいIT用語ではなく、現場の言葉で課題を整理し、小さく作って実務で使える形にします。</p>
       </div>
-      <div class="two-cta">
+
+      <article class="profile-body">
+        <p>はじめまして。Fornusとして、AI・GAS・Webアプリを使った業務改善ツールや、小規模事業者向けのWeb制作・自動化支援を行っています。</p>
+        <p>もともとは製造業の現場で12年間働いていました。現場では、工程管理、品質改善、人材育成、生産性改善などに関わり、最終的には係長として最大14名規模のライン管理を担当していました。</p>
+        <p>製造業の現場では、毎日の作業の中に「本当はもっと楽にできるはずなのに、ずっと手作業で続いていること」がたくさんあります。転記、集計、確認、報告、教育、引き継ぎ、在庫管理、進捗確認。ひとつひとつは小さな作業でも、毎日積み重なると大きな時間になります。</p>
+        <p>私自身も、現場でそうした作業の多さや、属人化した仕事の難しさを経験してきました。人によってやり方が違う、教え方が違う、確認の仕方が違う。仕組みがないことで、ミスが起きたり、誰か一人に負担が偏ったりする場面を何度も見てきました。</p>
+        <p>その中で、生産性の改善、不良率の低減、メーカークレームの削減などに取り組み、作業をただ頑張るのではなく「どうすれば無理なく続けられる形にできるか」を考えるようになりました。</p>
+        <p>現在はその経験をもとに、AI・Google Apps Script・スプレッドシート・Webアプリを組み合わせて、個人事業主や小規模事業者の方の手作業を減らす仕組み作りを行っています。</p>
+        <p>大切にしているのは、難しいIT用語を並べることではありません。今どんな作業をしていて、どこに時間がかかっていて、どこを自動化すれば楽になるのかを、現場の言葉で整理することです。</p>
+        <p>いきなり大きなシステムを作るのではなく、まずは小さく作って、実際に使えるかを確認する。使いながら改善して、少しずつ業務に合う形に育てていく。そういう進め方を大切にしています。</p>
+        <p>「これって自動化できるのかな？」<br>「今のExcelやスプレッドシートを少し楽にできないかな？」<br>「AIを使ってみたいけど、何から始めればいいか分からない」</p>
+        <p>そういった段階でも問題ありません。今の作業内容を見ながら、できること・できないこと、費用感、最初に作るならどこからが良いかを一緒に整理します。</p>
+        <p>手作業をゼロにするというより、毎日少しずつ発生している面倒な作業を減らし、本来やるべき仕事に時間を戻す。Fornusでは、そういう実務に近い業務改善ツールを作っています。</p>
+      </article>
+
+      <div class="profile-stats" aria-label="実績">
+        <article class="profile-stat"><span>製造業</span><strong>12年</strong></article>
+        <article class="profile-stat"><span>ライン管理</span><strong>最大14名</strong></article>
+        <article class="profile-stat"><span>生産性改善</span><strong>+1232円/時</strong></article>
+        <article class="profile-stat"><span>最低不良率</span><strong>0.08%</strong></article>
+        <article class="profile-stat"><span>クレーム0件</span><strong>69ヶ月</strong></article>
+        <article class="profile-stat"><span>制作領域</span><strong>AI / GAS / Web</strong></article>
+      </div>
+
+      <h3 class="profile-section-title">制作で大切にしていること</h3>
+      <div class="profile-values">
+        <article class="info-card"><h3>現場の言葉で整理する</h3><p>難しいIT用語ではなく、今の作業の流れから改善点を探します。</p></article>
+        <article class="info-card"><h3>小さく作って試す</h3><p>最初から大きく作らず、まず使える形を作って改善します。</p></article>
+        <article class="info-card"><h3>実務で使える形にする</h3><p>見た目だけでなく、実際の入力・確認・運用まで考えて作ります。</p></article>
+      </div>
+
+      <div class="two-cta profile-cta">
         <button class="pixel-btn primary" type="button" data-route="services">できることを見る</button>
         <button class="pixel-btn" type="button" data-route="chatbot">簡易見積もりへ</button>
+        <button class="pixel-btn" type="button" data-route="contact">相談する</button>
       </div>
     </div>
   </section>
@@ -3283,7 +3422,7 @@ if ('IntersectionObserver' in window &&
    既存LPを残しつつ、ページ切り替え型の入口を追加する。
    ================================================ */
 (function initPortfolioApp() {
-  const pages = ['home', 'menu', 'about', 'services', 'works', 'pricing', 'chatbot', 'contact'];
+  const pages = ['home', 'menu', 'profile', 'services', 'works', 'pricing', 'chatbot', 'contact'];
   const nav = document.getElementById('top-nav');
   const heroSprite = document.getElementById('portfolio-hero-sprite');
   const botIcon = document.getElementById('bot-icon');
@@ -3310,6 +3449,7 @@ if ('IntersectionObserver' in window &&
 
   function routeFromHash() {
     const route = location.hash.replace('#/', '').trim();
+    if (route === 'about') return 'profile';
     return pages.includes(route) ? route : 'home';
   }
 
@@ -3327,8 +3467,9 @@ if ('IntersectionObserver' in window &&
   }
 
   function go(page) {
-    location.hash = '#/' + page;
-    setRoute(page);
+    const nextPage = page === 'about' ? 'profile' : page;
+    location.hash = '#/' + nextPage;
+    setRoute(nextPage);
   }
 
   document.addEventListener('click', event => {
@@ -3438,7 +3579,7 @@ if ('IntersectionObserver' in window &&
     const W2 = 640;
     const H2 = 420;
     const items = [
-      { key: 'about', label: 'ABOUT', sub: 'Fornusについて', x: 24, y: 70, w: 96, h: 58 },
+      { key: 'profile', label: 'PROFILE', sub: 'プロフィール', x: 24, y: 70, w: 106, h: 58 },
       { key: 'services', label: 'SERVICES', sub: 'できること', x: 124, y: 158, w: 96, h: 58 },
       { key: 'works', label: 'WORKS', sub: '制作実績', x: 224, y: 70, w: 96, h: 58 },
       { key: 'pricing', label: 'PRICING', sub: '料金目安', x: 324, y: 158, w: 96, h: 58 },

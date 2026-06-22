@@ -11,3 +11,4 @@
 - 追加修正でEメールCTAを `mailto:fornus.fujiwara@gmail.com` として有効化した。
 - PC表示は1画面固定ではなく、内容が切れないことを優先して縦スクロール可能にした。
 - 旧LPと旧ゲームJSは残すが、`portfolio-mode` では旧ゲームのキーイベントと旧Canvasループを実行しない。
+- ABOUTはPROFILEへ変更した。`#/about` は互換としてPROFILEへ解決する。
