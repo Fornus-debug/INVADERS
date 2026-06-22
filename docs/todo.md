@@ -9,6 +9,7 @@
 - 相談文自動生成とコピー機能を追加
 - スマホ操作用 LEFT / FIRE / RIGHT を維持
 - LINE相談CTAを `https://lin.ee/RnwJwMO` で有効化
+- EメールCTAを `fornus.fujiwara@gmail.com` で有効化
 - 公開前に文字サイズを上げ、PCでも内容が切れないよう縦スクロールを許可
 
 ## 残タスク

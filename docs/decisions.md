@@ -8,5 +8,6 @@
 - 外部AI APIは使わず、チャットボットはフロントだけのルールベース診断にした。
 - CTAリンクは単体HTML内の `LINKS` 定数管理を維持した。
 - 公開前修正でLINE CTAのみ有効化し、未設定CTAは `href` を外して `aria-disabled="true"` のままにした。
+- 追加修正でEメールCTAを `mailto:fornus.fujiwara@gmail.com` として有効化した。
 - PC表示は1画面固定ではなく、内容が切れないことを優先して縦スクロール可能にした。
 - 旧LPと旧ゲームJSは残すが、`portfolio-mode` では旧ゲームのキーイベントと旧Canvasループを実行しない。
